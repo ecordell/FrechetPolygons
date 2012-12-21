@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<TITLE>The Shortest Path Algorithm by Lee &amp; Preparata</TITLE>
+</HEAD>
+<BODY LANG="de-DE" DIR="LTR">
+<P><APPLET CODEBASE="../ShortestPathLP" CODE="appsSwingGui.ShortestPathLP.ShortestPathLPApplet" ALIGN=BOTTOM WIDTH=200 HEIGHT=30>
+	<PARAM NAME="archive" VALUE="AppletShortestPathLP.jar">
+</APPLET>
+</P>
+<H3><U>Calculating the shortest path in a simple polygon</U></H3>
+<P>Given a closed polygon the shortest path inside that polygon from
+a <B>start</B> point to a <B>target</B> shall be constructed. Those
+two points must of course be inside the polygon, too. This path only
+consists of segments between start, target and some vertexes of the
+outline of polygon. How can these points be connected in the shortest
+way with no polygon edges intersecting?</P>
+<P>There exist some algorithms to solve this problem - this applet
+represents the algorithm invented by <A HREF="#literature">D.T. Lee
+and F.P. Preparata in 1984</A>.</P>
+<P><BR>Please click on &bdquo;<I>Start the algorithm!</I>&ldquo;
+above to start the applet!</P>
+<P>In the lower part of this page one can get a <A HREF="#The applet">description</A>
+of the applet.</P>
+<H3>The algorithm</H3>
+<P>The tasks of the algorithm:</P>
+<OL>
+	<LI><P>Compute the <I>triangulation</I> of the given simple polygon.
+	(using the <A HREF="#seidel"><I>Seidel triangulation</I></A>:
+	runtime: ~O(<I>n</I>))</P>
+	<LI><P>Compute the <I>dual graph</I> of that triangulation.
+	(runtime: O(<I>n</I>))</P>
+	<LI><P>Compute the <I><B>D</B>epth<B>F</B>irst<B>S</B>earch</I> on
+	that dual graph starting at the start point. (Only the part from
+	start to the target point is needed.)</P>
+	<P>(runtime: O(<I>n</I>))</P>
+	<LI><P>Iteratively add the diagonals that are crossed by the DFS and
+	calculate the <A HREF="#Funnels">funnels</A> that represent the
+	shortest path from start to the end points of the now examined
+	diagonal. (runtime: O(<I>n</I>))</P>
+</OL>
+<P><A NAME="seidel"></A>Runtime specifications refer to the size <I>n</I>
+of the point set.
+</P>
+<H4>Seidel-Triangulation</H4>
+<P>Runtime: ~<I>O</I>(<I>n</I>)</P>
+<P>An algorithm that computes the triangulation of a polygon quite
+fast is the Seidel-Triangulation. It has a runtime of <I>O</I>(<I>n
+log* n</I>), which is almost linear. More information can be found
+in: <I>Raimund Seidel: A Simple and Fast Incremental Randomized
+Algorithm for Computing Trapezoidal Decompositions and for
+Triangulating Polygons.</I></P>
+<H4><A NAME="Funnels"></A>Funnels</H4>
+<P>Runtime: <I>O</I>(<I>n</I>)</P>
+<P>The shortest path from <B>start</B> to <B>target</B> can be
+computed in <I>linear runtime</I> by initiating the funnel
+exploration at <B>start </B>and then iterativly (in <I>DFS order</I>)
+adding diagonals until finally adding the <B>target</B>. Only the
+shortest paths from the temporary start (the <I>root</I>) of the
+funnel to the <I>top</I> of the funnel, which is always represented
+by the currently added <I>diagonal</I> have to be inspected. Those
+shortest paths are framed by the walls of the funnel: every shortest
+path to any point on the current diagonal lies inside the funnel.
+</P>
+<P>When the first diagonal that is visited by the DFS is added, the
+left end point is added to the left funnel wall(from the perspective
+of start) and the right one to the right funnel wall . So the first
+funnel always is a triangle unless start lies on the first diagonal.
+When a new diagonal is inserted, there is actually only one new point
+added to the funnel (an end point of that diagonal) as the other
+point corresponds to one of the end points of the previous diagonal:
+<I>two subsequent diagonals always have one end point in common</I>.
+When that new point has to be added to the left funnel wall, the left
+funnel wall has to be examined first (for a point that has to be
+added to the right funnel wall this corresponds): the funnel is
+scanned from the top (the previous diagonal) to the current root to
+find a tangent from the added point to the funnel wall. Those points
+that have been unsuccessfully visited will be deleted. So every point
+will be visited only once (this leads to the runtime: O(<I>n</I>)).
+<BR>If the root of the current funnel has already been examined and
+neither a tangent nor a direct connection to the root has been found,
+the search continues at the other funnel wall now going from root to
+the other end point of the current diagonal. First the root and then
+all following points are added to the shortest path from start to
+target until a tangent is found. Such a tangent will usually be found
+as the funnel walls are <I>convex chains</I>. The point, where the
+tangent lies is the new root of the funnel. If none is found and the
+other end point of the diagonal is reached, the funnel consists only
+of that diagonal and the &bdquo;<I>old</I>&ldquo; diagonal end point
+is the new root. In that case a concave polygon edge needs to be
+by-passed by the shortest path. <BR>At the end, <B>target</B> is
+added to the left funnel wall and a last funnel exploration takes
+place. The complete shortest path now consists first of the temporary
+shortest path and second of the final left funnel wall.</P>
+<H3><A NAME="The applet"></A>The applet</H3>
+<P>The start button above opens a separate frame containing the
+actual application.</P>
+<P>In this new window please first draw a simple polygon on the white
+drawing area. Redundant points, i.e. points that lie on an edge and like this are unnecessary, will be deleted. The three <I>zoom</I> buttons above can be used to zoom
+view in or out. A click on <B>Fit</B> fits the polygon size perfectly
+to the window size.</P>
+<P>Once the polygon is closed the applet can show the <B>triangulation
+</B><SPAN STYLE="font-weight: medium">(in yellow dotted lines)</SPAN><B>
+</B>and the <B>dual graph </B><SPAN STYLE="font-weight: medium">(coloured
+blue)</SPAN><B>. </B>Just click on the corresponding Checkboxes in
+the lower part of the window.<br>Please note, that whenever you insert a point on a polygon edge, the applet will not refresh until you move that new redundant point.</P>
+<P>To insert the <B>start</B> or the <B>target</B> point, right-click
+inside the polygon and select the corresponding menu item in the
+popup menu. Start will be coloured dark green and target will be red.
+The <I>diagonals</I> of the Seidel triangulation that need to be
+crossed by the shortest path from <B>start </B>to <B>target</B> will
+be visible immediately as yellow dashed lines.</P>
+<P><IMG SRC="pics/Diagonals.JPG" NAME="diagonals" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P>Next to the two Checkboxes for the triangulation and the dual
+graph, there are three Radio buttons which allow you to select the
+way in which the construction of the shortest path should be shown.
+You can see the shortest path (always in green) at once by clicking
+on <B>Path</B>.</P>
+<P><IMG SRC="pics/ShortestPathLP.JPG" NAME="shortest path" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P>If you want to see an automated funnel exploration, click on <B>Run.</B>
+The funnels pop up in red outlined in white &ndash; or if the funnel
+corresponds to a diagonal, it will be only a white segment. This kind
+of exploration will look quite similar to the picture below, but it
+will develop automatically (please do not interrupt the automated
+development by clicking anywhere while it runs, this might lead to
+multiple automated runs).</P>
+<P><IMG SRC="pics/FunnelRun.JPG" NAME="run" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P>By default <B>Steps</B> is selected. Whenever you click on <B>Next</B><SPAN STYLE="font-weight: medium">,
+the current funnel will become an old funnel in dark red and the next
+funnel will popup in bright red. B</SPAN>ut before that, you will see
+blue segments popup, if the old funnel consists of more than a
+diagonal and if the new diagonal not only extends one of the old
+funnel walls, because it keeps the convex chain convex. Those are the
+segments, that are checked for being <I>tangents</I> to the funnel
+walls.
+</P>
+<P><IMG SRC="pics/StepByStepTangents.JPG" NAME="tangents" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P><IMG SRC="pics/StepByStep.JPG" NAME="steps" ALIGN=BOTTOM WIDTH=677 HEIGHT=355 BORDER=0></P>
+<P>If a funnel corresponds to one of the diagonals, that diagonal
+will be overpainted in white, if it is the current funnel or in red,
+if its a previous funnel.</P>
+<P><IMG SRC="pics/StepByStepDiagonal.JPG" NAME="steps-diagonal" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P>The previous funnel will become visible in dark red outlined in
+red, when you click on <B>Previous</B>.</P>
+<P><IMG SRC="pics/StepByStepBack.JPG" NAME="backspace" ALIGN=LEFT WIDTH=677 HEIGHT=355 BORDER=0><BR CLEAR=LEFT>
+<BR><BR>
+</P>
+<P>If a previous funnel (in the <B>Steps</B> case) is overlapped by
+the actual funnel, please note, that the <I>top</I> of the previous
+funnel always corresponds to the previously entered diagonal and that
+side of the old funnel, that stays invisible corresponds to the part
+of the current funnel up to the previously inserted diagonal.</P>
+<H3>Reference:</H3>
+<UL>
+	<LI><P><A NAME="literature"></A>D. T. Lee and F. P. Preparata:
+	Euclidean shortest paths in the presence of rectilinear barriers.
+	Networks, 14:393-410, 1984.</P>
+</UL>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

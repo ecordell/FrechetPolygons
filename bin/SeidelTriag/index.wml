@@ -1,0 +1,156 @@
+#include "template.t"
+
+<rootpath "..">
+<basefile "index">
+<pagetitle "[DE:Die Triangulierung eines einfachen
+Polygons:][EN:Triangulation of a simple polygon:]">
+<keywords "Java Applets computational geometry dilaton graph voronoi algorithmische Geometrie Computer Science Informatik online algorithms">
+<category CompGeomBasics>
+<author "Marina Bachran, Seidel-Triangulation">
+<author "Jan Tulke, HOCHTIEF, PSLG-Triangulation">
+
+<table align="center" border="0">
+<tr>
+<td width="700">
+<h2><a name="Intro">[DE:Einleitung:][EN:Introduction:]</a></h2>
+
+<p align="justify">[DE:Dieses Applet stellt zwei Algorithmen zur
+Triangulierung eines einfachen, geschlossenen Polygons vor. Man
+kann das Problem folgenderma&szlig;en beschreiben: Ist ein Polygon
+gegeben, dass <i>n</i> Kanten hat, so sind die <i>n</i>-3
+Diagonalen gesucht, die das Polygon in <i>n</i>-2 Dreiecke
+unterteilen.:][EN:This applet presents two algorithms to triangulate
+            a simple, closed polygon. One can describe the problem as follows:
+            If a polygon is given that has <i>n</i> edges, then the <i>n</i> diagonals are
+            searched, which divide the polygon into <i>n</i>-2 triangles.:]</p>
+
+<ul>
+<li><a href="#tria">[DE:Die Triangulierung nach Seidel:][EN:The Triangulation nach Seidel:]</a></li>
+
+<li><a href="#Applet">[DE:Applet zur Triangulierung eines
+Polygons:][EN:An Applet to triangulate a polygon:]</a></li>
+
+<li><a href="#Sources">[DE:Quelle:][EN:Reference:]</a></li>
+</ul>
+
+<table border="0">
+<tr>
+<td><b>[DE:Schnellstart des Applets:][EN:Quick applet start:]:</b> </td>
+<td><applet code="appsSwingGui.SeidelTriag.SeidelTriangulationApplet"
+archive="classes.zip" width="70" height="23"></applet> <br>
+ </td>
+</tr>
+</table>
+
+<br>
+ 
+
+<h2><a name="tria">[DE:Die Triangulierung nach Seidel:][EN:The Seidel-Triangulation:]</a></h2>
+
+<p align="justify">[DE:Gegeben ist ein Polygon mit <i>n</i> Kanten
+bzw. Eckpunkten.:][EN:A polygon with <i>n</i> edges, respectively points,
+            is given.:]</p>
+
+<div align="center"><img src="www-pics/Poly.gif" border=
+"1"></div>
+
+<p align="justify">[DE:Die Eckpunkte und Kanten des Polygons werden
+in zuf&auml;lliger Reihenfolge in eine spezielle Datenstruktur, der
+QueryStructure eingef&uuml;gt. Durch das Einf&uuml;gen der
+Eckpunkte und Kanten entstehen Trapezoide, die nach dem
+Einf&uuml;gen die gesuchte Trapezzerlegung darstellen. Weitere
+Informationen zu der Organisation der QueryStructure finden sich
+in:][EN:The points and edges of the polygons are
+            inserted in coincidental order into a special data structure,
+            the QueryStructure. Trapezoids are generated from inserting the
+            points and edges, which represent the searched trapezoidation
+            after inserting all edges and points. Further information to
+            the organization of the QueryStructure is in:] <a href="#SEI91">[SEI91]</a>.</p>
+
+<div align="center"><img src="www-pics/PolyTraps.gif" border=
+"1"></div>
+
+<p align="justify">[DE:Anschlie&szlig;end werden Diagonalen
+eingef&uuml;gt, die das Polygon in y-monotone Polygone aufteilen.
+Eine solche Diagonale wird nur innerhalb eines Trapezoids angelegt
+und zwar m&uuml;ssen ihre Endpunkte auf verschiedenen Seiten des
+Polygons liegen.:][EN:Subsequently, diagonals are inserted,
+            which divide the polygon into y-monotonous polygons. Such a
+            diagonal is inserted only within a trapezoid to have their
+            terminator points on different sides of the polygons to-be.:]</p>
+
+<div align="center"><img src="www-pics/PolyDiags.gif" border=
+"1"></div>
+
+<p align="justify">[DE:Die durch die Diagonalen entstandenen
+y-monotonen Polygone k&ouml;nnen mit einem Greedy-Algorithmus in
+linearer Zeit in Dreiecke aufgeteilt werden.:][EN:The y-monotonous polygon, developed by the
+            diagonals, can be divided into triangles in linear time with a
+            Greedy algorithm.:]</p>
+
+<div align="center"><img src="www-pics/PolyTriangles.gif"
+border="1"></div>
+
+<h2><a name="Applet">[DE:Applet zur Triangulierung eines
+Polygons:][EN:An Applet to triangulate a polygon:]</a></h2>
+
+<table border="0">
+<tr>
+<td><b>[DE:Starten des Applets:][EN:Start applet:]:</b> </td>
+<td><applet code="appsSwingGui.SeidelTriag.SeidelTriangulationApplet"
+archive="classes.zip" width="70" height="23"></applet> <br>
+ </td>
+</tr>
+</table>
+
+<p align="justify">[DE:Durch Klicken mit der linken Maustaste
+k&ouml;nnen die Eckpunkte des Polygons eingegeben werden. Sobald
+das Polygon geschlossen ist, wird die Triangulierung berechnet und
+kann durch Anklicken der Checkboxen am unteren Bildschirmrand
+angezeigt werden.:][EN:The corner points of the polygons can be entered
+            by clicking with the left mouse button. As soon as the polygon is
+            closed, the triangulation is computed and can be displayed by
+            clicking the checkmarks at the lower edge of the screen.:]</p>
+
+<ul>
+<li><u>Show Trapezoids:</u><br>
+ [DE:Die Trapezzerlegung des Polygons wird angezeigt.:][EN:The trapezoidation of the polygon is displayed.:]</li>
+
+<li><u>Show Diagonals:</u><br>
+ [DE:Die Diagonalen aus dem Zwischenschritt zur Triangulierung
+werden angezeigt.:][EN:The diagonals from the intermediate step to the triangulation
+                are displayed.:]</li>
+
+<li><u>Show Triangulation (Seidel):</u><br>
+ [DE:Eine Triangulierung des Polygons wird angezeigt.:][EN:A triangulation of the polygons is displayed.:]</li>
+ 
+<li><u>Show Triangulation (PSLG):</u><br>
+ [DE:Eine andere Triangulierung des Polygons wird angezeigt.:][EN:Another triangulation of the polygons is displayed.:]</li>
+</ul>
+
+<br>
+ 
+
+<h2><a name="Sources">[DE:Quelle:][EN:Reference:]</a></h2>
+
+<table>
+<tr>
+<td width="80" valign="top"><a name="SEI91">[SEI91]</a> </td>
+<td>Raimund Seidel:<br>
+ <i>A simple and fast incremental randomized algorithm for
+computing trapezoidal decompositions and for triangulating
+polygons</i><br>
+ <a href=
+"http://www-tcs.cs.uni-sb.de/papers/trap.ps.gz">http://www-tcs.cs.uni-sb.de/papers/trap.ps.gz</a>
+<br>
+ Comput. Geom. Theory and Appl. 1 (1991) 51-64.<br>
+ </td>
+</tr>
+</table>
+
+<p align="right"><a href="#Intro">[DE:...nach oben:]</a></p>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,65 @@
+
+From: anja.geom.Circle2
+Description: obsolete rendering code
+
+private void drawOval(Graphics2D g, float x, float y, float w, float h)
+	{
+		Point2D.Float src = new Point2D.Float(x, y);
+		Point2D.Float dst = new Point2D.Float(x + w, y + h);
+	
+		// temporary debugging section
+		
+		// intercept current affine transform
+		AffineTransform tx = g.getTransform();
+		
+		AffineTransform one = new AffineTransform();
+		one.setToIdentity();
+		
+		// set current xform to idendity
+		g.setTransform(one);
+		
+		tx.transform(src, src);
+		tx.transform(dst, dst);
+		
+		g.drawOval(Math.round(Math.min(src.x, dst.x)), 
+				   Math.round(Math.min(src.y, dst.y)), 
+				   Math.round(Math.abs(dst.x - src.x)), 
+				   Math.round(Math.abs(dst.y - src.y)));
+		
+		// set transform back to normal
+		g.setTransform(tx);
+		
+		
+	}
+
+   
+    private void fillOval(Graphics2D g, float x, float y, float w, float h)
+	{
+		Point2D.Float src = new Point2D.Float(x, y);
+		Point2D.Float dst = new Point2D.Float(x + w, y + h);
+		
+		
+		// temporary debugging section
+		
+		// intercept current affine transform
+		AffineTransform tx = g.getTransform();
+		
+		AffineTransform one = new AffineTransform();
+		one.setToIdentity();
+		
+		// set current xform to idendity
+		g.setTransform(one);
+		
+		tx.transform(src, src);
+		tx.transform(dst, dst);
+		
+		g.fillOval(Math.round(Math.min(src.x, dst.x)), 
+				   Math.round(Math.min(src.y, dst.y)), 
+				   Math.round(Math.abs(dst.x - src.x)), 
+				   Math.round(Math.abs(dst.y - src.y)));
+		
+		// set transform back to normal
+		g.setTransform(tx);
+		
+	}
+   

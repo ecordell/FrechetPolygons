@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+       "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- version 0.1 27.09.2011 -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Package documentation for JavaAnimation: anja.util.example</title>
+</head>
+
+<body bgcolor="white">
+<p>The package provides the classes and interfaces to create examples for the applets
+or applications. It includes basic interfaces for each example, 
+a manager to handle all examples and listener
+and events which simplify the interaction with the user of the applet.<br />
+As many applets handle their own examples in the most different ways, this is
+a way to standardize this procedure. The polygon editors offer a functionality
+to write <code>Polygon2Scenes</code> to an <code>OutputStream</code>. This
+option is rather restricted and only offers to save those special scenes.<br />
+This package does not only depend on polygonal scenes but can be used to save
+very application specific examples (e.g. the polygons and some additional
+points as in <code>PolyRobot</code> and a hint on the specific method that should 
+be used with this certain example and so on).<br />
+It depends on the application which information should be saved and which is
+unneccessary to save. Receiving an <code>Example</code> and restoring it
+is possible via the listener inferaces in this package.</p>
+
+<h2>Interfaces</h2>
+
+<h3>Example</h3>
+<p>This is the main interface of the package. Every example must implement this
+interface. It has two main functionalities. On the one hand there is a <code>name</code>
+given for each example. It is e.g. used by the GUI to represent each example and should
+therefore be representative for the example itself. On the other hand the serialization
+offers the possibility to save whole examples via <code>OutputStream</code>.</p>
+
+<h3>ExampleListener</h3>
+<p>The interface should be implemented by all classes that want to be informed if
+an example changes - if the user has chosen another example - or should be saved. 
+The class then has to register to an eg <code>ExamplePanel</code> before.
+</p>
+
+
+<h2>Classes</h2>
+
+<h3>Adapters</h3>
+<p>Some adapters which allow to port serializable objects to <code>byte</code> arrays,
+return the Java code to create whole objects and the possibility to port <code>byte</code>
+arrays to instances of objects again.</p>
+
+<h3>BasicExample</h3>
+<p>This class is a simple implementation of the <code>Example</code> interface.</p>
+
+<h3>ExampleChangeEvent</h3>
+<p>The event is send to all <code>ExampleListener</code> objects that have been registered. 
+It adds the possibility to additionally add an <code>Example</code> object
+to a basic event. The example can be received via <code>getExample()</code> method.</p>
+
+
+<h3>ExampleManager</h3>
+<p>A manager based on an <code>ArrayList</code> that overrides some methods to
+work with <code>Example</code> objects.</p>
+
+<h3>ExamplePanel</h3>
+<p>The main graphical class of the package. It adds a load and save option for
+<code>Example</code> implementing objects. Additionally <code>ExampleListeners</code>
+can register and are informed about changes or save requests. To save an example to
+file use the method <code>saveExample()</code>. The class handles its own <code>ExampleManager</code>.
+To receive a reference use the <code>getExampleManager()</code> method. This way new
+examples can be added via the application.<br />
+The debug mode prints possible exceptions to the console if enabled. The java code mode displays
+a button if enabled, which allows to display the java code of the current example shown in
+the combo box. By default the debug mode is enabled and the jc mode is disabled.
+</p>
+
+<h3>ExampleSaveEvent</h3>
+<p>The event is send to all <code>ExampleListener</code> objects that have been registered. 
+It adds the possibility to additionally add a <code>File</code> object
+to a basic event. The file can be received via <code>getFile()</code> method.</p>
+
+
+<h3>An example:</h3>
+<p>The main class of the applet should inherit the listener interface and create an instance of
+the panel</p>
+
+<pre><code>
+public class MyApplet
+        extends JApplet
+        implements ExampleListener
+{
+    ...
+    private ExamplePanel&lt;MyAppletExample&gt; _examplePanel = new ExamplePanel&lt;MyAppletExample&gt;();
+    ...
+    
+    this.add(_examplePanel);
+    _examplePanel.addExampleListener(this);
+    ...
+    
+    ExampleManager&lt;MyAppletExample&gt; em = this._examplePanel.getExampleManager();
+    //add some own examples  
+    ...
+    
+    public void exampleChanged(
+            ExampleChangeEvent&lt;MyAppletExample&gt; e)
+    {
+        MyAppletExample ex = e.getExample();
+        //do something with the example, e.g. load into Polygoneditor
+        //if the whole polygonscene is saved, use the clone() method,
+        //otherwise the example in memory is changed if the scene changes      
+    }
+
+    public void exampleSave(
+            ExampleSaveEvent e)
+    {
+        MyAppletExample ex = new MyAppletExample();
+        //Fill the current scene into the example object
+        // ex.p1 = ...;
+        // ex.p2 = ...;
+        // ex.message = ...;
+        // ex.seglist = ...;
+        ...
+        //The save method can only be called when the example object is ready
+        //The load procedure is handled by the panel itself
+        _examplePanel.saveExample(e.getFile(), ex);      
+    }
+
+    ...
+}
+</code></pre>
+
+<p>The example object could look like this:</p>
+<pre><code>
+public class MyAppletExample
+        extends BasicExample
+        //implements Example
+{
+    public Polygon2 p1 = null;
+    public Polygon2 p2 = null;
+    public String message = null;
+    public List&lt;Segment2&gt; seglist = null;
+    
+    public MyAppletExample()
+    {
+        //name is inherited from BasicExample
+        this.name = (new java.util.Date()).toString();
+    }
+
+    public MyAppletExample(String name)
+    {
+        this.name = name;
+    }
+}
+</code></pre>
+
+@author Andreas Lenerz
+@version 1.0
+
+</body>
+
+</html>

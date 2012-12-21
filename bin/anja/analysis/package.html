@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+       "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- version 0.6 30.04.2004 -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Package-Dokumentation für JavaAnimation: anja.analysis</title>
+</head>
+
+<body bgcolor="white">
+Stellt ein Klassensystem für die Erzeugung, Analyse und Berechnung von
+mathematischen <i>Funktionen</i> zur Verfügung. Funktionen und ihre Parameter
+und Funktionswerte sind allgemein gehalten, um eine Vielfalt von verschiedenen
+Funktionstypen zu ermöglichen.<p>
+
+<h3>Argumente</h3>
+<p>Verschiedenen Methoden werden ein oder mehrere <i>Argumente</i> übergeben,
+z.B. bei der Funktionswertberechnung. Ein Argument ist eine Instanz der Klasse
+<code>Argument</code>. Ein solches <code>Argument</code> ist universell
+definiert als ein Array aus <code>Number</code>-Objekten. Dies wurde gewählt,
+um als Argumente Zahlen aus einem möglichst breiten Spektrum wählen zu können.
+So kann ein <code>Argument</code>-Objekt beispielsweise eine (eindimensionale)
+reelle Zahl, ein (dreidimensionaler) Raumvektor oder eine komplexe Zahl
+sein.<br>
+Auf die einzelnen Array-Elemente kann direkt ohne den Umweg über eine Methode
+zugegriffen werden. Dies geschieht über die Array-Variable <code>n</code>.</p>
+
+<h3>Definitionsmengen und Intervalle</h3>
+<p>Jede Funktion besitzt eine <i>Definitionsmenge</i>, die je nach Funktion
+statisch oder veränderbar ist. Die Schnittstelle <code>Domain</code>
+spezifiziert die Methoden, die auf Definitionsmengen anwendbar sind:<ul>
+<li>die Methoden <code>isValidArgument(x)</code> bzw. <code>contains(x)</code>
+zum Prüfen, ob ein Argument <i>formal korrekt</i> ist, um in der
+Definitionsmenge angetroffen werden zu können bzw. ob ein Argument
+<i>Element</i> der Definitionsmenge ist</li>
+<li>die Methoden <code>equals(o)</code> bzw. <code>isEmpty()</code> zum
+<i>Vergleichen</i> der Definitionsmenge mit einer anderen Definitionsmenge bzw.
+der leeren Menge</li>
+<li>die Methode <code>dimension()</code> zum Ermitteln der
+<i>Dimensionalität</i> der Definitionsmenge</li>
+<li>die Methoden <code>intersection(domain)</code> und
+<code>union(domain)</code> zum Erzeugen der Schnitt- oder Vereinigungsmenge
+zweier Definitionsmengen</li>
+<li>die Methode <code>clone()</code> zum Erzeugen einer
+Defintionsmengenkopie</li></ul></p>
+
+<p>Die unten beschriebenen <i>reellen Funktionen</i> besitzen als konkrete
+Definitonsmenge eine Instanz der Klasse <code>RealDomain</code>, die eine
+Definitionsmengenimplementierung für reelle Zahlen ist.<br>
+<code>RealDomain</code> ist eine Definitionsmenge aufgebaut aus einer
+beliebigen Zahl sich nicht überdeckender <i>Intervalle</i> über reellen Zahlen,
+die durch die Klasse <code>Interval</code> repräsentiert werden. Ein solches
+<code>Interval</code> besteht aus einer unteren und oberen <i>Schranke</i>,
+welche wiederum aus Objekten der Klasse <code>Bound</code> bestehen.
+<code>Bound</code> ist eine Erweiterung von <code>Argument</code> mit einem
+zusätzlichen <i>Schrankenkriterium</i>, mit dessen Hilfe sich <i>offene</i>,
+<i>halboffene</i> und <i>geschlossene</i> Intervalle erzeugen lassen.</p>
+
+<h3>Funktionen (abstrakt)</h3>
+<p>An der Spitze der Funktionshierarchie steht die abstrakte Klasse
+<code>Function</code>, von der alle Funktionen abgeleitet werden. Daher
+beinhaltet jede Funktion die folgenden grundlegenden mathematischen
+Methoden:<ul>
+<li>die Methode <code>f(x)</code> zum Berechnen eines
+<i>Funktionswerts</i></li>
+<li>die Methode <code>limit(c)</code> zum Berechnen eines
+<i>Grenzwerts</i></li>
+<li>die Methoden <code>inverse(y)</code> und <code>inverseAll(y)</code> zum
+Berechnen der Funktionswerte der <i>Umkehrfunktion</i></li>
+<li>die Methode <code>getDiscontinuities()</code> zur Ermittlung der
+<i>Sprungstellen</i></li>
+<li>die Methode <code>domain()</code> zur Ermittlung der
+<i>Definitionsmenge</i></li>
+<li>die Methoden <code>isValidArgument(x)</code> bzw.
+<code>isDefinedFor(x)</code> zur Prüfung, ob ein <i>Argument</i> für die
+Funktionswertberechnung <i>formal korrekt</i> ist bzw. ob die Funktion für ein
+Argument <i>definiert</i> ist</li>
+<li>die Methode <code>intersection(g)</code> zur Berechnung der
+<i>Schnittmenge</i> mit einer anderen Funktion</li></ul>
+Daneben existieren folgende Methoden, die den Umgang mit Funktionen
+erleichtern:<ul>
+<li>die Methode <code>clone()</code> zum Erzeugen einer Funktionskopie</li>
+<li>die Methoden <code>equals(obj)</code> und
+<code>isCongruent(function)</code>, mit denen ermittelt werden kann, ob die
+Funktion zu einer anderen <i>identisch</i> ist</li>
+<li>die Methode <code>toString()</code> zur Ausgabe einer Funktion in
+Textform</li></ul></p>
+
+<h3>Reelle Funktionen (abstrakt)</h3>
+<p>Die abstrakte Klasse <code>RealFunction</code> ist eine Spezialisierung von
+<code>Function</code> auf <i>reelle Funktionen</i>, die als Argument und
+Funktionswert jeweils eine einzelne <i>reelle Zahl</i> benutzen.
+Dementsprechend stehen vereinfachte Versionen der Methoden aus
+<code>Function</code> zur Verfügung, die als Parameter und Funktionswert statt
+eines <code>Argument</code>-Objekts eine <code>double</code>-Zahl verwenden.
+Hierzu zählen die Methoden <code>f(x)</code>, <code>limit(c)</code>,
+<code>inverse(y)</code>, <code>inverseAll(y)</code>,
+<code>isValidArgument(x)</code>, <code>isDefinedFor(x)</code>.<br>
+Außerdem gibt es einige zusätzliche Methoden speziell für reelle
+Funktionen:<ul>
+<li>die Methoden <code>derivative()</code> und <code>derivative(n)</code>
+zur Berechnung der <i>Ableitungsfunktionen</i></li>
+<li>die Methode <code>extrema()</code> zur Berechnung der
+<i>Extremwerte</i></li>
+<li>die Methode <code>roots()</code> zur Nullstellenberechnung</li>
+<li>die Methode <code>getOrientation(...)</code>, mit der die Orientierung
+zweier Funktionen zueinander ermittelt werden kann</li></ul></p>
+
+<p>Reelle Funktionen können mit Hilfe des Pakets
+<a href="../swing/function/package-summary.html"
+><code>anja.swing.function</code></a> in 2D visualisiert werden.</p>
+
+<h3>Polynome</h3>
+<p>Die Klasse <code>Polynomial</code> als Erweiterung von
+<code>RealFunction</code> repräsentiert reelle Polynome <i>f</i>(<i>x</i>) =
+<i>k<sub>n</sub>x<sup>n</sup></i> +
+<i>k<sub>n</i>-1</i></sub><i>x<sup>n</i>-1</sup> + ... +
+<i>k<sub></i>1<i></sub>x</i> + <i>k</i><sub>0</sub>. Zum Umgang mit diesen gibt
+es folgende zusätzliche Methoden:<ul>
+<li>die Methode <code>degree()</code> zum Ermitteln des <i>Grads</i> eines
+Polynoms</li>
+<li>die Methoden <code>getCoefficient(i)</code> und
+<code>setCoefficient(i,value)</code> zum Ermitteln und Verändern der
+<i>Koeffizienten</i></li>
+<li>die Methode <code>setDomain(interval)</code> zum Beschränken der
+Definitionsmenge, um <i>Teilpolynome</i> zu erzeugen.</li></ul></p>
+
+<p>Zum vereinfachten Umgang mit Polynomen bis Grad 2 existieren die Klassen
+<code>ConstantFunction</code>, <code>LinearFunction</code> und
+<code>QuadraticFunction</code>.</p>
+
+<h3>Konturen von reellen Funktionen</h3>
+<p>Die Klasse <code>RealEnvelope</code> bietet universelle untere und obere
+<i>Konturfunktionen</i> für reelle Funktionen. Die untere (obere) Kontur einer
+Menge von Funktionen {<i>f</i><sub>1</sub>...<i>f<sub>n</sub></i>} an der Stelle
+<i>x</i> ist definiert als das Minimum (Maximum) aller
+<i>f<sub>i</sub></i>(<i>x</i>). <code>RealEnvelope</code> ist als Ableitung von
+<code>RealFunction</code> selbst eine reelle Funktion und bietet ein paar
+zusätzliche Methoden:<ul>
+<li>die <code>add(...)</code>-Methoden zum Hinzufügen neuer Funktionen zur
+Kontur<li>
+<li>die Methode <code>getFunctionFor(x)</code> zum Ermitteln derjenigen
+Funktion <i>f<sub>i</sub></i>, die an der Stelle <i>x</i> auf der Kontur
+liegt</li>
+<li>die Methoden <code>getType()</code> und <code>isEmpty()</code>, um den
+Konturtyp (obere/untere Kontur) zu testen oder zu ermitteln, ob die Kontur leer
+ist</li></ul>
+</p><br>
+
+<h2>Richtlinien zur Erstellung eigener Klassen</h2>
+<h3>Neue reelle Funktionen</h3>
+Analog zur Klasse <code>Polynomial</code> werden reelle Funktionen von
+<code>RealFunction</code> abgeleitet. Dabei müssen nicht alle dort
+spezifizierten Methoden neu implementiert werden, sondern nur einige
+"grundlegende", auf denen die anderen Methoden aufbauen, um die volle
+Funktionalität zu erhalten:<ol>
+<li><code>f(x)</code> zur Funktionswertermittlung muss implementiert
+werden. Wenn die Definitionsmenge der Funktion beschränkt ist, muss die
+<i>protected</i>-Variable <code>_domain</code> angepasst werden.</li>
+<li><code>limit(c)</code> zur Grenzwertermittlung muss implementiert
+werden.</li>
+<li><code>inverseAll(y)</code> zur Berechnung der Umkehrfunktion muss
+implementiert werden. Dies kann beispielsweise wie in <code>Polynomial</code>
+mit Hilfe des <i>Newton-Verfahrens</i> geschehen.</li>
+<li><code>intersection(g)</code> zur Schnittmengenberechnung muss
+implementiert werden. Dazu kann die Methode <code>inverseAll(y)</code>
+benutzt werden, indem aus den Schnittfunktionen <i>f</i>(<i>x</i>) und
+<i>g</i>(<i>x</i>) die Differenzfunktion <i>y</i> =
+(<i>f</i>-<i>g</i>)(<i>x</i>) gebildet wird und davon die Umkehrfunktion
+für <i>y</i> = 0 berechnet wird.</li>
+<li><code>derivative()</code> zur Bildung der Ableitungsfunktion muss
+implementiert werden.</li>
+<li>Die Methoden <code>clone()</code> und <code>equals(obj)</code> müssen
+implementiert werden.</li></ol>
+Alle anderen Methoden bauen auf diesen auf und können bei Bedarf überschrieben
+werden.</p>
+
+<p>Um wenigstens die neue Funktion visuell durch
+<a href="../swing/function/package-summary.html"
+><code>anja.swing.function</code></a> darstellen zu können, genügt 1.<br>
+Wenn die Funktion korrekt in einer Kontur verwendet werden soll, muss auch 4.
+(und damit 3. und 5.) implementiert werden.</p>
+
+<h3>Neue nicht-reelle Funktionen</h3>
+<p>Eine neue nicht-reelle Funktion oder Funktionengruppe, die nicht als
+<code>RealFunction</code> modelliert werden kann, wird direkt von
+<code>Function</code> abgeleitet. Dazu müssen neben den in
+<code>Function</code> als <code>abstract</code> deklarierten Methoden (sofern
+benötigt) auch die Methoden <code>inverseAll(y)</code> und
+<code>intersection(g)</code> implementiert werden, falls Schnittbestimmung und
+Umkehrfunktionsberechnung benötigt wird. Ebenfalls sollte die Methode
+<code>domain()</code> bzw. die Definitionsmenge <code>_domain</code> selbst
+angepasst werden.</p>
+
+<p>Bei entsprechend spezifizierten Methoden (z.B. <code>inverseAll(y)</code>)
+kann statt einer korrekten Berechnung auch eine
+<code>UnsupportedOperationException</code> geworfen werden, wenn auf die
+Implementierung verzichtet werden kann. Fehlt aber die Exception-Deklaration,
+so muss die Methode korrekt implementiert werden.</p>
+
+<h3>Eigene Argumenttypen</h3>
+<p>Die Klasse <code>Argument</code> ist so universell angelegt, dass auf eine
+davon abgeleitet eigene Klasse verzichtet werden soll. Stattdessen sollen
+neue von <code>Number</code> abgeleitete Klassen definiert werden, wenn der
+Bedarf für neuartige Argumente besteht.</p>
+</body>
+
+</html>

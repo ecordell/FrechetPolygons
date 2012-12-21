@@ -2,5 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="jdom.jar"/>
+	<classpathentry kind="lib" path="j3dcore.jar"/>
+	<classpathentry kind="lib" path="j3dutils.jar"/>
+	<classpathentry kind="lib" path="jEduLib.jar"/>
+	<classpathentry kind="lib" path="jogl-all.jar"/>
+	<classpathentry kind="lib" path="gluegen.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

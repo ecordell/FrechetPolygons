@@ -1,0 +1,63 @@
+Unterschiede zu anja.geom
+-------------------------
+
+Gemeinsame Unterschiede
+-----------------------
+
+Die ratgeom-Klassen besitzen die Methode toGeom(), die ein entsprechendes
+anja.geom Objekt erzeugt. Die toGeom()-Methoden der Klassen Point2List und
+Polygon2 geben im Unterschied zu den anderen Klassen ein Objekt vom Typ
+Object zurück, da sie voneinander abgeleitet sind und sich die 'normale'
+Lösung deshalb nicht realisieren.
+
+
+Unterschiede einzelner Klassen
+------------------------------
+
+Arc2:
+   Zusätzlicher Konstruktor:
+      Arc2( Point2, BigRational, double, double, int )
+   Zusätzliche Methoden:
+      BigRational radius()
+      void setRadius( BigRational )
+      BigRational squareRadius()
+   Sonstige Änderungen:
+      float-Parameter durch double-Parameter ersetzt.
+      source() und target() liefern Kopien statt Referenzen
+      auf den Start- und Endpunkt.
+
+BasicLine2:
+   calculatePoint():
+      Bei einer vertikalen Line wird null zurückgegeben anstatt ein Punkt
+      mit der y-Koordinate Double.POSITIVE_INFINITY.
+
+Circle2:
+   Zusätzlicher Konstruktor:
+      Circle2( Point2, BigRational )
+   Zusätzliche Methoden:
+      BigRational radius()
+      void setRadius( BigRational )
+      BigRational squareRadius()
+   Sonstige Änderungen:
+      float-Parameter durch double-Parameter ersetzt.
+
+Point2:
+   Die Klasse ist nicht mehr von Point2D abgeleitet.
+   x und y sind vom Typ BigRational.
+   Zusätzliche Konstruktoren:
+      Point2( BigRational, BigRational )
+      Point2( BigRational, Point2, BigRational, Point2 )
+   Zusätzliche Methoden:
+      BigRational bigDistance()
+      BigRational bigDistance( Point2 )
+      BigRational bigSquareDistance()
+      BigRational bigSquareDistance( Point2 )
+
+Point2List:
+   Sonstige Änderungen:
+      float-Parameter durch double-Parameter ersetzt.
+   
+Polygon2:
+   Nicht implementiert: 
+      vis( Point2 )
+

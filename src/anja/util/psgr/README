@@ -1,0 +1,124 @@
+----------------------------------------------------------------------
+                PSGr - A Java PostScript Generator
+    (C) 1999 Ernest J. Friedman-Hill and Sandia National Laboratories
+----------------------------------------------------------------------
+
+1. What is PSGr?
+
+In Java, you draw to a java.awt.Graphics object. This is an abstract
+class. Most subclasses render to a bitmap, for example, a screen
+image. PSGr1 and PSGr2 are subclasses that render to PostScript text. When
+you create a PSGrN, you provide a java.io.Writer. The PostScript will
+appear on this stream. That's it.
+
+2. How do I use it?
+
+It's very simple. You just create the appropriate object (PSGr1 for
+Java 1.1, or PSGr2 for Java 2), specifying a place for the PostScript
+to go, and then make normal java.awt.Graphics calls to produce a
+PostScript rendition. If you don't supply an argument, the postscript
+goes to System.out. For example
+
+
+     import gov.sandia.postscript.PSGr1;
+     ...
+     Graphics postscript = new PSGr1();
+
+     postscrjpt.setColor(Color.red);
+     postscript.fillRect(10, 10, 30, 30);
+
+will produce PostScript output on stdout to draw a small red
+square. You can use FileWriters to put output in a file, StringWriters
+to get the output as a String, etc.
+
+The PostScript command to finish and eject a page from a printer is
+"showpage". You'll need to append this string to the output from PSGr
+before sending it to a printer.
+
+I've included two JAR files, containing the precompiled classes for
+either Java 1.1 (psgr1.jar) or Java 2 (psgr2.jar). You should put one
+of these on your classpath.
+
+3. Demo
+
+I've included a demo for testing. The class gov.sandia.postscript.Test
+should be invoke with the full class name of one of the PSGr
+classes. It will throw up a small window filled with graphics
+demos. Pressing the "Print" button will generate a PostScript file
+names psgr.ps. Send this file to a printer to see what it looks like;
+it should be virtually identical to the onscreen display.
+
+4. Limitations
+
+There are a few things PSGr can't do correctly.
+
+  - PSGr can't do XOR mode because PostScript doesn't have XOR mode.   
+
+  - The create() call is unimplemented. This means that, while single
+    Swing widgets can often be printed, entire Swing GUIs generally
+    cannot. To print a widget with PSGr, of course, you can simply
+    call paint() on the component, passing a PSGr object as the
+    argument. 
+    
+  - PSGr is MUCH better at handling drawImage calls than it used to
+    be. It cannot currently handle images which are scaled to negative
+    sizes, which should produce inverted or flipped images.
+
+  - The new drawString that uses an AttributedCharacterIterator is
+    unimplemented. 
+
+5. License
+
+PSGr is freeware. You may use it for any purpose, with the 
+provisos that an acknowledgement to myself and Sandia must be made on
+the packaging materials and in the help text, "About..." box, and
+other appropriate areas of any product incorporating PSGr, and that
+you accept the licensing terms stated below.
+
+Sandia makes no warranty, express or implied, as to the accuracy or
+utility of PSGr. Sandia further makes no warranty, express or
+implied, that the use of PSgr as made available herein under this
+License Agreement will not infringe any United States or foreign
+patent, copyright or trade secret. Under this License Agreement,
+PSgr is made available to the Licensee on an "AS-IS"
+basis. Sandia and the Government and their agents, officers and
+employees shall not be liable for any loss, damage (including
+incidental, consequential and special), injury or other casualty
+of whatsoever kind, or by whomsoever caused, to the person or
+property of anyone, including the Licensee and its Affiliates,
+arising out of or resulting from the license granted to the
+Licensee herein, or the accuracy and validity of PSgr, or from
+any system or component thereof made, used, sold, leased or
+transferred by the Licensee, and the Licensee agrees for itself,
+its successors and assigns, to defend, indemnify and hold Sandia
+and the Government, harmless from and against all claims,
+demands, liabilities, suits or actions (including all reasonable
+expenses and attorney's fees incurred by or imposed on the
+Licensee or its Affiliates in connection therewith) for such
+loss, damage (including incidental, consequential and special),
+injury or other casualty.
+
+NEITHER THE UNITED STATES GOVERNMENT, NOR THE UNITED STATES
+DEPARTMENT OF ENERGY, NOR SANDIA CORPORATION, NOR ANY OF THEIR
+EMPLOYEES, MAKE ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
+LEGAL LIABILITY OF RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS,
+OR USEFULNESS OF ANY INFORMATION, APPARATUS, PRODUCT, OR PROCESS
+DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE
+PRIVATELY OWNED RIGHTS.
+
+6. History
+
+I first wrote PSGr for the very first "Java Cup" Java programming
+contest. It was part of an applet that could (via some jury-rigging
+and a CGI) produce a PostScript image of any other applet on the same
+Web page. It didn't win. But PSGr was a popular download from this web
+site for several years.
+
+Java 1.1 made changes that broke PSGr, so (lacking time to maintain
+it) I eventually removed it from the Web. Java 2 made more
+incompatible changes, compounding matters. I recently needed PSGr
+myself, so I've taken the time to clean it up, fix some bugs, get it
+working again, and repost it.
+
+This version (2.1) fixes a few small bugs and cleans up the Test
+driver so that it doesn't print the PostScript prolog to stdout.

@@ -1,0 +1,380 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>Dokumentation und Handbuch zur anja.swing-GUI</title>
+<meta name="author" content="Sascha Ternes">
+<meta name="generator" content="Ulli Meybohms HTML EDITOR">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#FF0000" alink="#FF0000" vlink="#FF0000">
+
+<h1 align=center>Dokumentation und Handbuch zur <code>anja.swing</code>-GUI</h1></p>
+
+<p>Diese Dokumentation beschreibt das neue GUI-System von
+<a href="package-summary.html"><code>anja.swing</code></a>. Die
+einzelnen Systemkomponen werden aufgelistet und mit Hinweisen zur Benutzung
+kommentiert.</p>
+<h2>Inhalt:</h2>
+<p><ol>
+<li><a href="#chapter1">&Uuml;berblick - das Zusammenspiel der GUI-Komponenten</a></li>
+<li><a href="#chapter2">Beschreibung der einzelnen Komponenten</a></li><ul>
+<li><a href="#register"><code>Register</code></a></li>
+<li><a href="#cosystem"><code>CoordinateSystem</code></a></li>
+<li><a href="#display"><code>JDisplayPanel</code></a></li>
+<li><a href="#editor"><code>Editor</code></a></li>
+<li><a href="#scene"><code>Scene</code></a></li>
+<li><a href="#object"><code>SceneObject</code></a></li>
+<li><a href="#plugin"><code>JPluginDialog</code></a></li>
+<li><a href="#ppp"><code>JPaintPriorityPanel</code></a></li>
+<li><a href="#extension"><code>EditorExtension</code></a></li>
+</ul>
+<li><a href="#chapter3">Typische Reihenfolge der Instantiierung</a></li>
+<li><a href="#chapter4">Programmbeispiel</a></li></ol></p><br>
+
+<h2><a name="chapter1">1. &Uuml;berblick - das Zusammenspiel der GUI-Komponenten</a></h2>
+<p>Vorbild f&uuml;r das neue GUI-System in <code>anja.swing</code> ist jenes aus
+<a href="../swinggui/package-summary.html"><code>anja.swinggui</code></a>,
+welches zun&auml;chst als graphischer Editor f&uuml;r Polygone designt wurde. Sp&auml;ter
+wurde auch eine Variante f&uuml;r Graphen mit &auml;hnlichem Aussehen und Bedienung daraus
+abgeleitet.</p>
+
+<p>Als die Aufgabe anstand, einen &auml;hnlichen Editor bzw. ein Visualisierungstool
+f&uuml;r mathematische Funktionen zu implementieren, reichten die etwas
+eingeschr&auml;nkten M&ouml;glichkeiten der <code>anja.swinggui</code> nicht mehr aus,
+und ich begann mit der Entwicklung von <code>anja.swinggui.function</code>.<br>
+Dieses Unterpaket der <code>swinggui</code> entwickelte sich rasch zu einem
+ganz neuen, eigenst&auml;ndigen System, das nicht mehr viel mit dem urspr&uuml;nglichen
+gemeinsam hatte. Daher wurde ein neues Paket <code>anja.swing</code>
+geschaffen, in dem die grundlegensten Klassen des Funktionseditors als
+Superklassen f&uuml;r weitere spezifischere Anwendungen entwickelt wurden.</p>
+
+<p>Diese Grundklassen, aus denen sich jede auf <code>anja.swing</code>
+basierende Anwendung aufbaut, sind die folgenden:<ol>
+<li><a href="#display"><code>JDisplayPanel</code></a> - eine
+interaktive <i>Anzeige- und Zeichenfl&auml;che</i> f&uuml;r die Grafikobjekte, die in der
+Anwendung (gew&ouml;hnlich ein Editor, der mit zus&auml;tzlichen Funktionen ausgestattet
+wird) erzeugt, dargestellt und ver&auml;ndert werden sollen.<br>
+Diese Zeichenfl&auml;che ist eine echte Swing-Komponente mit dementsprechenden
+Funktionalit&auml;ten.</li>
+<li><a href="#scene"><code>Scene</code></a> - eine Sammlung der
+Grafikobjekte, <i>Szene</i> genannt, die in der Zeichenfl&auml;che dargestellt
+werden sollen.<br>
+Die Szene ist <b>keine</b> grafische Komponente, sondern eine
+<b>Datenstruktur</b>, die sich allerdings auch um das optische Aussehen der
+Grafikobjekte k&uuml;mmert und diese in der Zeichenfl&auml;che darstellt.</li>
+<li><a href="#object"><code>SceneObject</code></a> - die Grafikobjekte
+der Szene, <i>Szenenobjekte</i> genannt.<br>
+Alle in der Szene enthaltenen Grafikobjekte sind Instanzen dieser Klasse. Ein
+Szenenobjekt ist eine Datenstruktur zur Beschreibung des entsprechenden
+Grafikobjekts, k&uuml;mmert sich aber nicht um sein optische Aussehen; daf&uuml;r ist
+allein die Szene zust&auml;ndig.</li>
+<li><a href="#editor"><code>Editor</code></a> - die Steuerungskomponente des
+GUI-Systems.<br>
+Aufgabe des <i>Editors</i> ist die Interpretation von Benutzeraktionen in der
+GUI. Der Editor ist ebenfalls keine grafische Komponente.</li></ol></p>
+
+<p>Daneben gibt es eine Reihe von Hilfsklassen:<ul>
+<li><a href="#register"><code>Register</code></a> - Instanzen dieser Klasse
+werden <i>Register</i> genannt und dienen als Registrierungsobjekte f&uuml;r die
+einzelnen Editorkomponenten.<br>
+Register sind notwendig, um die gegenseitigen Zugriffe der GUI-Komponenten
+untereinander zu vereinfachen. Auf diese Weise muss nicht jede GUI-Komponente
+eine Referenz auf die anderen Komponenten, auf die sie zugreifen will, speichern.</li>
+<li><a href="#cosystem"><code>CoordinateSystem</code></a> - ein
+<i>Koordinatensystem</i>, das die Grundlage f&uuml;r die Position der Grafikobjekte
+in der Zeichenfl&auml;che darstellt.<br>
+Das Koordinatensystem kann in der Zeichenfl&auml;che angezeigt werden und wird beim
+<i>Scrollen</i> und <i>Zoomen</i> der Szene automatisch angepasst.</li>
+<li><a href="#plugin"><code>JPluginDialog</code></a> - optionale Dialoge zum
+Ver&auml;ndern der Szenenobjekte.<br>
+Ein <i>Plugin</i> ist eine komfortable M&ouml;glichkeit, die allgemeinen und spezifischen
+Daten der Szenenobjekte anzuzeigen und zu ver&auml;ndern. Plugins erscheinen als
+Dialogfenster f&uuml;r jedes Szenenobjekt. Es ist damit m&ouml;glich, die Daten von
+beliebig vielen Szenenobjekten gleichzeitig anzuzeigen und zu ver&auml;ndern, wobei
+die Ver&auml;nderungen sofort in der Zeichenfl&auml;che sichtbar werden.</li>
+<li><a href="#extension"><code>EditorExtension</code></a> - optionale
+Erweiterungen des Editors um besondere Funktionalit&auml;ten.<br>
+Eine <i>Editor-Erweiterung</i> oder k&uuml;rzer <i>Extension</i> enth&auml;lt Funktionen,
+die nicht direkt im Editor integriert werden. Eine typische Anwendung ist das
+Verarbeiten der Szene bzw. der Szenenobjekte zur Berechnung neuer Grafiken, die
+"on the fly" in Echtzeit &uuml;ber die Szene gezeichnet werden sollen. Ein gutes
+Beispiel sind <i>Voronoi-Diagramme</i>, die aus einer editierten Punktmenge
+berechnet und visualisiert werden.</li>
+<li><a href="#ppp"><code>JPaintPriorityPanel</code></a> - zeigt
+in einer Liste die Zeichenreihenfolge der Szenenobjekte an und bietet Buttons
+zum Ver&auml;ndern der Reihenfolge.<br>
+Das <i>Zeichenpriorit&auml;tspanel</i> kann optional verwendet werden, wenn bei sich
+&uuml;berlappenden Szenenobjekten festgelegt werden soll, welches Objekte im Vordergrund
+gezeichnet werden sollen, damit diese vollst&auml;ndig sichtbar sind.</li>
+</ul></p>
+
+<p>Schlie&szlig;lich gibt es im Paket <code>anja.swing</code> noch einige weitere Klassen,
+die hier aber nicht beschrieben werden m&uuml;ssen. Als Informationsquelle k&ouml;nnen die
+<i>JavaDoc-Kommentare</i> dieser Klassen dienen.</p><br>
+
+<h2><a name="chapter2">2. Beschreibung der einzelnen Komponenten</a></h2>
+<p>Es folgt nun eine Einzelbeschreibung jeder Klasse in einer sinnvollen Reihenfolge.</p>
+
+<a name="register"><h3>Die Klasse <code>Register</code></h3></a>
+<p>Ein <i>Register</i> ist die Grundlage f&uuml;r den gegenseitigen Zugriff der
+GUI-Komponenten. Ein <code>Register</code>-Objekt muss immer als erstes erzeugt werden,
+denn es wird bei den meisten GUI-Komponenten im Konstruktor &uuml;bergeben. Diese Komponenten
+referenzieren sich selbst im Register und k&ouml;nnen fortan von den anderen Komponenten
+und nat&uuml;rlich von anderen Programmteilen aufgerufen werden.</p>
+
+<p>Mittels Registern kann aber auch eine Komponente f&uuml;r mehrere Editoren verwendet
+werden. Eine sinnvolle Anwendung hierf&uuml;r ist beispielsweise die Verwendung des selben
+Koordinatensystems in zwei Anzeigefl&auml;chen: So kann in der einen Zeichenfl&auml;che eine
+Szene editiert werden, w&auml;hrend in der anderen eine Editorerweiterung zeichnet und die
+Szene selbst nicht &uuml;berdeckt, was den Benutzer beim Editieren st&ouml;ren k&ouml;nnte.
+Dazu muss lediglich ein zweites Register angelegt werden mit einer Kopie der
+Koordinatensystem-Referenz, einer zweiten Anzeigefl&auml;che und der Editor-Erweiterung.</p>
+
+<p><font color="#FFB000">zum Programmbeispiel</font> <a href="#code">---></a></p>
+
+<a name="cosystem"><h3>Die Klasse <code>CoordinateSystem</code></h3></a>
+<p>Die Zeichenfl&auml;che der GUI zeigt stets einen Ausschnitt aus der gedachten
+zweidimensionalen unendlichen Zeichenebene. Jede Zeichenfl&auml;che ben&ouml;tigt deshalb ein
+Koordinatensystem, das festlegt, wie die <i>Weltkoordinaten</i> der
+Grafikobjektpositionen in Pixelkoordinaten der Zeichenfl&auml;che umgerechnet werden.<br>
+Der dargestellte Ausschnitt kann verschoben und gezoomt werden, daher ist ein
+Koordinatensystem kein statisches Objekt, sondern kann sich bei jedem Neuzeichnen der
+Szene ver&auml;ndern.</p>
+
+<p>Technisch betrachtet speichert ein Koordinatensystem neben weiteren Details vor
+allem die virtuelle <i>Pixelposition des Koordinatenursprungs</i> (virtuell deshalb, weil der
+Ursprung ja auch au&szlig;erhalb des Zeichenfensters liegen kann), die den Ausschnitt festlegt
+und die <i>Aufl&ouml;sung</i> des Koordinatensystems, die direkt den Zoomfaktor bestimmt
+und in Pixel pro Einheit gemessen wird.<br>
+Aus diesen Daten des Koordinatensystems wird eine <i>Transformationsmatrix</i>
+berechnet, mit der die Szene die Grafikobjekte direkt in Weltkoordinaten positionieren
+kann.</p>
+
+<p><font color="#D56A00">zum Programmbeispiel</font> <a href="#code">---></a></p>
+
+<a name="display"><h3>Die Klasse <code>JDisplayPanel</code></h3></a>
+<p>Ein <code>JDisplayPanel</code> ist die einzige grundlegende GUI-Komponente, die
+direkt in das Layout der Anwendung eingebaut wird. Hierf&uuml;r eignet sich am Besten ein
+Layoutmanager wie <code>BorderLayout</code>, der seinen Komponenten maximalen Platz
+bietet.</p>
+
+<p>Der angezeigte Ausschnitt in der Anzeigefl&auml;che kann durch Klicken und Halten der
+linken Maustaste und Bewegen der Maus verschoben (<i>gescrollt</i>) werden.
+Analog kann mit der rechten Maustaste der Ausschnitt vergr&ouml;&szlig;ert und verkleinert
+(<i>gezoomt</i>) werden. Bei diesen Aktionen wird der Koordinatenursprung und der
+Zoomfaktor werden neu berechnet und das Koordinatensystem wird entsprechend
+aktualisiert, ebenso die intere Transformationsmatrix. Anschlie&szlig;end werden
+bestimmte Methoden des Editors aufgerufen:<ul>
+<li><a href="Editor.html#canvasScrolled(java.awt.Point)"><code>canvasScrolled(...)</code></a>
+beim Scrollen,</li>
+<li><a href="Editor.html#canvasZoomed(java.awt.Point)"><code>canvasZoomed(...)</code></a>
+beim Zoomen.</li></ul></p>
+
+<p>Beim Bewegen der Maus &uuml;ber die Zeichenfl&auml;che wird ebenfalls eine Methode des Editors
+aufgerufen:<ul>
+<li><a href="Editor.html#cursorMoved(java.awt.Point)"><code>cursorMoved(...)</code></a></li></ul></p>
+
+<p>Angezeigte Szenenobjekte k&ouml;nnen angeklickt (<i>selektiert</i>) und verschoben
+werden. Es wird dabei zwischen einfachem Selektieren mit der linken Maustaste und
+dem Kontext-Klick mit der rechten Maustaste unterschieden. Diese Aktionen l&ouml;sen die
+folgenden Methodenaufrufe im Editor aus:<ul>
+<li><a href="Editor.html#objectClicked(anja.swing.SceneObject, java.awt.Point)"><code>objectClicked(...)</code></a>
+beim Anklicken mit dem linken Mausknopf,</li>
+<li><a href="Editor.html#objectContext(anja.swing.SceneObject, java.awt.Point)"><code>objectContext(...)</code></a>
+beim Kontextklick mit dem rechten Mausknopf und</li>
+<li><a href="Editor.html#objectDragged(anja.swing.SceneObject, java.awt.Point, int)"><code>objectDragged(...)</code></a>
+beim Verschieben eines Szenenobjekts.</li></ul></p>
+
+<p>Nach Ausf&uuml;hren dieser Methoden wird die komplette Zeichenfl&auml;che neugezeichnet. Beim
+Neuzeichnen passieren folgende Dinge:<ol>
+<li>Der Hintergrund wird gel&ouml;scht.</li>
+<li>Wenn eine Editorerweiterung registriert ist, wird deren
+<a href="EditorExtension.html#paintFirst(java.awt.Graphics, java.awt.geom.AffineTransform)"><code>paintFirst(...)</code></a>-Methode
+aufgerufen.</li>
+<li>Die <a href="Scene.html#paint(java.awt.Graphics, java.awt.geom.AffineTransform)"><code>paint(...)</code></a>-Methode
+der Szene wird aufgerufen, um die Szenenobjekte zu zeichnen.</li>
+<li>Wenn eine Editorerweiterung registriert ist, wird deren
+<a href="EditorExtension.html#paintLast(java.awt.Graphics, java.awt.geom.AffineTransform)"><code>paintLast(...)</code></a>-Methode
+aufgerufen.</li>
+<li>Die <a href="CoordinateSystem.html#draw(java.awt.Graphics, java.awt.Dimension)"><code>draw(...)</code></a>-Methode
+des Koordinatensystems wird aufgerufen, um das Koordinatensystem zu zeichnen (falls
+das Koordinatensystem <i>sichtbar</i> ist, d.h. die entsprechende Variable
+<code>true</code> ist).</li></ol></p>
+
+<p><font color="#FF0000">zum Programmbeispiel</font> <a href="#code">---></a></p>
+
+<a name="editor"><h3>Die Klasse <code>Editor</code></h3></a>
+<p>Ein <code>Editor</code> dient zur Interpretation der Benutzereingaben. Dazu
+werden die Mausaktionen im Anzeigepanel von diesem aufgefangen und an den
+Editor weitergeleitet. Im Editor sind für die Mausaktionen die auszuführenden
+Aktionen definiert. Im Einzelnen gibt es dafür die schon vorhergehenden
+Abschnitt zum <code>JDisplayPanel</code> aufgeführten Methoden.</p>
+
+<p>Weiterhin werden im Editor die Menüs definiert. Für die Basismenüs
+<i>File</i>, <i>Coordinate system</i> und <i>Scene</i> existieren die Methoden
+<a href="Editor.html#createFileMenu(java.awt.event.ActionListener)"><code>createFileMenu(...)</code></a>,
+<a href="Editor.html#createCoordinateSystemMenu(java.awt.event.ActionListener)"><code>createCoordinateSystemMenu(...)</code></a> und
+<a href="Editor.html#createSceneMenu(java.awt.event.ActionListener)"><code>createSceneMenu(...)</code></a>,
+mit denen Menüobjekte erzeugt werden können, um diese in die Menüleiste der
+Anwendung oder des Applets einzubauen.<br>
+Die Angabe des <code>ActionListener</code>-Parameters kann in den meisten
+Fällen durch <code>null</code> ersetzt werden, da der Editor sich automatisch
+um die meisten Aktionen kümmert. Eine Ausnahme bildet der Menüpunkt <i>File ->
+Exit</i>; dieser Menüpunkt muss explizit durch Aufruf der Methode
+<a href="Editor.html#includeExitMenuItem()"><code>includeExitMenuItem()</code></a>
+aktiviert werden, damit er in das <i>File</i>-Menü integriert wird, und der
+<code>ActionListener</code> muss in der Anwendung/dem Applet implementiert
+werden. Dies muss passieren, bevor das <i>File</i>-Menü erzeugt wird.<br>
+Analog dazu müssen die Menüpunkte zum Öffnen und Abspeichern der Szene explizit
+durch
+<a href="Editor.html#includeOpenSaveMenuItems()"><code>includeOpenSaveMenuItems()</code></a>
+aktiviert werden, jedoch enthält der Editor hier die nötigen Funktionen
+bereits. Schließlich gibt es den optionalen Menüpunkt <i>Scene -> Paint
+priority...</i>; um diesen sinnvoll zu verwenden, muss die Methode
+<a href="Editor.html#includePaintPriorityMenuItem(javax.swing.JDialog)"><code>includePaintPriorityMenuItem(...)</code></a>
+aufgerufen und das zuständige Zeichenprioritätspanel übergeben werden.<br>
+Um das Erzeugen einer Menüleiste weiter zu vereinfachen, existiert die Methode
+<a href="Editor.html#createJMenuBar(java.awt.event.ActionListener)"><code>createJMenuBar(..)</code></a>,
+die direkt eine komplette Menüleiste mit dem zuvor eingestellten Inhalt
+erzeugt.</p>
+
+<p><font color="#0000FF">zum Programmbeispiel</font> <a href="#code">---></a></p>
+
+<a name="scene"><h3>Die Klasse <code>Scene</code></h3></a>
+<p>Eine <code>Scene</code> dient zur zentralen Verwaltung der Objekte, die in einem
+<code>JDisplayPanel</code> angezeigt werden. Pro Anzeigefl&auml;che existiert stets nur
+eine einzige Szene.</p>
+
+<p>Eine Szene k&uuml;mmert sich um das Zeichnen der Objekte und verwaltet dazu intern
+eine Priorit&auml;tsliste, die bestimmt, in welcher Reihenfolge die Szenenobjekte in
+die Zeichenfl&auml;che gezeichnet werden.<br>
+Um die Zusammenarbeit mit dem Editor und dessen Mausbedienung zu vereinfachen,
+stellt die Szene mehrere Methoden zur Verf&uuml;gung. Eine Gruppe bilden dabei die
+folgenden beiden Methoden:<ul>
+<li><a href="Scene.html#closestObject(java.awt.geom.Point2D.Double)"><code>closestObject(...)</code></a>
+zum Ermitteln des dem Klickpunkt im Anzeigepanel n&auml;chstgelegenen Szenenobjekts und</li>
+<li><a href="Scene.html#selectObject(java.awt.geom.Point2D.Double, java.lang.Object)"><code>selectObject(...)</code></a>
+zum Selektieren des Szenenobjekts, das mit der Maus angeklickt wurde.</li></ul>
+Eine andere Gruppe bilden Methoden, mit denen selektierte Szenenobjekte in die Szene
+eingef&uuml;gt oder aus der Szene entfernt werden k&ouml;nnen:<ul>
+<li><a href="Scene.html#add(anja.swing.SceneObject, java.lang.Object)"><code>add(...)</code></a>
+f&uuml;gt ein Szenenobjekt zur Szene hinzu (mit niedrigster Zeichenpriorit&auml;t),</li>
+<li><a href="Scene.html#insert(anja.swing.SceneObject, java.lang.Object)"><code>insert(...)</code></a>
+f&uuml;gt ein Szenenobjekt in die Szene ein (mit h&ouml;chster Zeichenpriorit&auml;t) und</li>
+<li><a href="Scene.html#remove(anja.swing.SceneObject, java.lang.Object)"><code>remove(...)</code></a>
+entfernt ein Szenenobjekt aus der Szene.</li></ul>
+All diese Aktionen, die eine Ver&auml;nderung der Szene oder ihrer Objekte bewirken, erzeugen
+automatisch ein <i>Szenenereignis</i>, vertreten durch Instanzen der Klasse
+<a href="event/SceneEvent.html"><code>anja.swing.event.SceneEvent</code></a>.
+Diese Ereignisse k&ouml;nnen von Klassen, die
+<a href="event/SceneListener.html">anja.swing.event.SceneListener</a>
+implementieren, nach der &uuml;blichen Vorgehensweise abgefangen werden. Ein Editor
+implementiert standardm&auml;&szlig;ig das <code>SceneListener</code>-Interface und registriert
+sich bei der Szene; daher muss eine Szene vor einem Editor instantiiert werden.<br>
+Die Szene bietet auch die M&ouml;glichkeit, ein beliebiges Szenenereignis extern
+auszul&ouml;sen, und stellt hierf&uuml;r ebenfalls die entsprechenden Methoden bereit.</p>
+
+<p><font color="#800080">zum Programmbeispiel</font> <a href="#code">---></a></p>
+
+<a name="object"><h3>Die Klasse <code>SceneObject</code></h3></a>
+<p>
+</p>
+
+<a name="plugin"><h3>Die Klasse <code>JPluginDialog</code></h3></a>
+<p>
+</p>
+
+<a name="ppp"><h3>Die Klasse <code>JPaintPriorityPanel</code></h3></a>
+<p>
+</p>
+
+<a name="extension"><h3>Die Klasse <code>EditorExtension</code></h3></a>
+<p>
+</p><br>
+
+<h2><a name="chapter3">3. Typische Reihenfolge der Instantiierung</a></h2>
+<p>Die Verwendung der einzelnen Klassen und ihre Instantiierungsreihenfolge
+demonstriert das <a href="#chapter4">Programmbeispiel</a>.<br>
+Die optimale Reihenfolge in einem typischen Anwendung oder einem Applet ist die
+folgende:<ol>
+<li>Zuerst muss immer ein <code>Register</code> erzeugt werden, dass bei den
+anderen Grundklassen im Konstruktor angegeben werden muss.</li>
+<li>Als n&auml;chstes bietet es sich an, ein <code>CoordinateSystem</code> f&uuml;r die
+nachfolgende Zeichenfl&auml;che zu initialisieren.</li>
+<li>Es folgt ein <code>JDisplayPanel</code> als Anzeige-/Zeichenfl&auml;che.</li>
+<li>Im n&auml;chsten Schritt muss eine <code>Scene</code> angelegt werden, bevor der
+Editor initialisiert wird.</li>
+<li>Falls ein <code>JPaintPriorityPanel</code> ben&ouml;tigt wird, sollte dieses nun
+erzeugt werden, da dazu die Szene ben&ouml;tigt wird.</li>
+<li>Wenn eine Editorerweiterung verwendet wird, sollte nun ein
+<code>EditorExtension</code> instantiiert werden.</li>
+<li>Zum Schluss wird das <code>Editor</code>-Objekt erzeugt.</li></ol>
+Szenenobjekte und Plugins werden bei Bedarf dynamisch erzeugt und normalerweise
+&uuml;ber den Editor in die Szene eingef&uuml;gt.</p><br>
+
+<h2><a name="chapter4">4. Programmbeispiel</a></h2>
+<p>Die Vorgehensweise zum Erzeugen einer <code>anja.swing</code>-GUI-Anwendung
+verdeutlicht das folgende Programmfragment anhand des Pakets
+<code>anja.swing.graph</code>. GUI-relevante Anweisungen sind farblich hervorgehoben.
+Das Programm erzeugt einen einfachen Grapheditor:</p>
+
+<p><pre>
+   import java.awt.event.*;
+   import javax.swing.*;
+   import anja.swing.*;
+   import anja.swing.graph.*;
+
+   public class GUITest extends JFrame
+                        implements WindowListener
+   {
+
+      <font color="#008000">/*
+      * Programmstart
+      */</font>
+      public static void main( String[] args ) {
+         GUITest test = new GUITest();
+         test.setLocation( 100, 100 );
+         test.setSize( 400, 300 );
+         test.addWindowListener( test );
+         test.setVisible( true );
+      } // main
+
+      <font color="#008000">/*
+      * Konstruktor, erzeugt den Editor
+      */</font>
+      public GUITest() {
+         super( "GUITest" );
+         setLayout( new BorderLayout() );
+<a name="code">         <font color="#FFB000">Register reg = new Register();</font></a>
+         <font color="#D56A00">new CoordinateSystem( reg );</font>
+         getContentPane().add( <font color="#FF0000">new JDisplayPanel( reg )</font>, BorderLayout.CENTER );
+         <font color="#800080">new GraphScene( reg );</font>
+         <font color="#0000FF">Editor editor = new GraphEditor( reg );
+         editor.setOwner( this );
+         editor.includeOpenSaveMenuItems();</font>
+         setJMenuBar( <font color="#0000FF">editor.createJMenuBar( null )</font> );
+
+      } // GUITest
+
+      <font color="#008000">/*
+      * Programmende durch Schließen des Fensters
+      */</font>
+      public void windowClosing( WindowEvent e ) {
+         System.exit( 0 );
+      } // windowClosing
+
+      <font color="#008000">// nicht verwendet:</font>
+      public void windowActivated(WindowEvent e) {}
+      public void windowClosed(WindowEvent e) {}
+      public void windowDeactivated(WindowEvent e) {}
+      public void windowDeiconified(WindowEvent e) {}
+      public void windowIconified(WindowEvent e) {}
+      public void windowOpened(WindowEvent e) {}
+
+   } // class GUITest
+</pre></p>
+
+</body>
+
+</html>
