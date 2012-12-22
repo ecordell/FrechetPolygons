@@ -1,4 +1,4 @@
-package ShortestPathLP;
+package FrechetPolygon;
 
 import anja.swinggui.StartButtonApplet;
 
@@ -11,7 +11,7 @@ import anja.swinggui.StartButtonApplet;
  * @since 28.10.07
  */
 
-public class ShortestPathLPApplet extends StartButtonApplet
+public class FrechetPolygonApplet extends StartButtonApplet
 {
         // *************************************************************************
         // Private constants
@@ -28,9 +28,9 @@ public class ShortestPathLPApplet extends StartButtonApplet
         /**
          * Starts the applet.
          * 
-         * @see appsSwingGui.FrechetPolygon.ShortestPathLP
+         * @see FrechetPolygon.ShortestPathLP.ShortestPathLP
          */
-        public ShortestPathLPApplet()
+        public FrechetPolygonApplet()
         {
                 super("Start the algorithm!");
                 addApplication("appsSwingGui.ShortestPathLP.ShortestPathLP");

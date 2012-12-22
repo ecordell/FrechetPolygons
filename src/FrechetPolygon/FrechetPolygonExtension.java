@@ -1,4 +1,4 @@
-package ShortestPathLP;
+package FrechetPolygon;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -40,7 +40,7 @@ import anja.util.GraphicsContext;
  * @version 1.5 02.12.07
  */
 
-public class ShortestPathLPExtension implements Extendable
+public class FrechetPolygonExtension implements Extendable
 {
         // *********************************************************************
         // Private Constants
@@ -145,7 +145,7 @@ public class ShortestPathLPExtension implements Extendable
         // *********************************************************************
 
         /** the extended editor */
-        protected ShortestPathLPEditor _editor;
+        protected FrechetPolygonEditor _editor;
 
         /** the lower panel, where the "Next" and "Previous" buttons are placed */
         protected JPanel panel;
@@ -265,7 +265,7 @@ public class ShortestPathLPExtension implements Extendable
          * The constructor defines the basic appearances of the elements that
          * might be visualized.
          */
-        public ShortestPathLPExtension()
+        public FrechetPolygonExtension()
         {
                 _gc = new GraphicsContext();
                 _gc.setForegroundColor(_EDGE_COLOR);
@@ -1174,7 +1174,7 @@ public class ShortestPathLPExtension implements Extendable
          */
         public void registerPolygonEditor(ExtendablePolygonEditor editor)
         {
-                _editor = (ShortestPathLPEditor) editor;
+                _editor = (FrechetPolygonEditor) editor;
                 _previous = new JButton("Previous");
                 _next = new JButton("Next");
                 panel.add(_previous);
