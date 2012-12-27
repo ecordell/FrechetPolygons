@@ -1,6 +1,3 @@
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
@@ -25,7 +22,24 @@ public class ShortestPath {
     	this._end = end;
     }
 	
+	public void test() {		
+		//All edges should register as in the polygon
+		System.out.println("Edges in Polygon");
+		for (int i = 0; i < _poly.length; i++) {
+			int j = i + 1;
+			if (j >= _poly.length) {
+				j = 0;
+			}
+			if (lineInPolygon(_poly[i].x, _poly[i].y, _poly[j].x, _poly[j].y)) {
+				System.out.println("True");
+			} else {
+				System.out.println("False");
+			}
+		}
+	}
+	
 	public Point2D.Double[] getPath() {
+		this.test();
 		this.shortestPath(_start.x, _start.y, _end.x, _end.y);
 		System.out.println(Arrays.toString(_path));
 		return _path;
@@ -60,6 +74,29 @@ public class ShortestPath {
 	
 	private boolean lineInPolygon(double testSX, double testSY, double testEX, double testEY) {
 		double theCos, theSin, dist, sX, sY, eX, eY, rotSX, rotSY, rotEX, rotEY, crossX;
+		
+		//Edge detection
+		//Todo: make better. Probably should change array to a hash or list
+		//In fact all of this could be improved by assuming start and end are vertices, and referring to by index.
+		//Then they're adjacent if difference of indices = 1
+		for(int i = 0; i<_poly.length; i++) {
+			
+			if (getZero(_poly[i].x - testSX) == 0 && getZero(_poly[i].y - testSY) == 0) {
+				//check vertices before and after to see if it's the endpoint
+				int next = i+1;
+				if (next >= _poly.length) {
+					next = 0;
+				}
+				int prev = i - 1;
+				if (prev < 0) {
+					prev = _poly.length - 1;
+				}
+				if ((getZero(_poly[next].x - testEX) == 0 && getZero(_poly[next].y - testEY) == 0) ||
+				   (getZero(_poly[prev].x - testEX) == 0 && getZero(_poly[prev].y - testEY) == 0)) {
+					return true;
+				}
+			}
+		}
 		
 		testEX = testEX - testSX;
 		testEY = testEY - testSY;
@@ -128,6 +165,9 @@ public class ShortestPath {
 	  //  If there is a straight-line solution, return with it immediately.
 	  if (lineInPolygon(sX,sY,eX,eY)) {
 	    solutionNodes=0; 
+	    _path = new Point2D.Double[2];
+		_path[0] = new Point2D.Double(sX, sY);
+		_path[1] = new Point2D.Double(eX, eY);
 	    return true; 
 	  }
 	

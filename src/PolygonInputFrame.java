@@ -16,7 +16,7 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	drawPanel = new PlotArea();
     	this.getContentPane().add(drawPanel);
     	this.addTestPolygons();
-    	ShortestPath spCalculator = new ShortestPath(polyQ, polyQ[0], polyQ[2]);
+    	ShortestPath spCalculator = new ShortestPath(polyQ, polyQ[0], polyQ[3]);
     	drawPanel.spPath = spCalculator.getPath();
 	}
 	
