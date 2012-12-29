@@ -16,8 +16,54 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	drawPanel = new PlotArea();
     	this.getContentPane().add(drawPanel);
     	this.addTestPolygons();
-    	ShortestPath spCalculator = new ShortestPath(polyQ, polyQ[0], polyQ[3]);
+    	Point2D.Double start = new Point2D.Double((polyQ[0].x+polyQ[3].x)/2,
+                (polyQ[0].y+polyQ[3].y)/2);
+    	Point2D.Double end = new Point2D.Double(polyQ[2].x, polyQ[2].y);
+    	
+    	polyQ = this.polygonWithStartAndEndPointsInserted(polyQ, start, end);
+    	
+    	ShortestPath spCalculator = new ShortestPath(polyQ, start, end);
     	drawPanel.spPath = spCalculator.getPath();
+	}
+	
+	private Point2D.Double[] polygonWithStartAndEndPointsInserted(Point2D.Double[] poly, Point2D.Double start, Point2D.Double end) {
+		//Iterate through all edges
+		for (int i = 0; i < poly.length; i++) {
+			int j = i + 1;
+			if (j >= poly.length) {
+				j = 0;
+			}
+			//if distance from point to edge is small, insert point between the vertices making up that edge
+			double denominator = Math.sqrt((poly[j].x - poly[i].x)*(poly[j].x - poly[i].x) + (poly[j].y - poly[i].y)*(poly[j].y - poly[i].y));
+			double startNumerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - start.y) - (poly[i].x - start.x)*(poly[j].y - poly[i].y));
+			double endNumerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - end.y) - (poly[i].x - end.x)*(poly[j].y - poly[i].y));
+			
+			//TODO: these should probably be linked lists to avoid annoying/slow array resizing
+			//Note: this is an else if, because they should only both be true if the start and end points are both on an edge, which should never happen
+			Point2D.Double[] newPolygon = new Point2D.Double[poly.length + 1];
+			if (getZero(startNumerator/denominator) == 0) {
+				System.arraycopy(poly, 0, newPolygon, 0, j);
+				newPolygon[j] = start;
+				System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
+				return newPolygon;
+				
+			} else if (getZero(endNumerator/denominator) == 0) {
+				System.arraycopy(poly, 0, newPolygon, 0, j);
+				newPolygon[j] = end;
+				System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
+				return newPolygon;
+			} 
+		}
+		return poly;
+	}
+	
+	private double getZero(double x) {
+		double testPositiveZero = 0.00000000001;
+		double testNegativeZero = -0.00000000001;
+		if (x >= testNegativeZero && x <= testPositiveZero) {
+			x = 0;
+		}
+		return x;
 	}
 	
 	private void addTestPolygons() {

@@ -107,14 +107,15 @@ public class ShortestPath {
 	    for (int i = 0; i< _poly.length; i++) {
 	        int j = i + 1;
 	        if (j >= _poly.length) {
-	                j = 1;
+	            j = 1;
 	        }
 
 	        sX = _poly[i].x - testSX;
 	        sY = _poly[i].y - testSY;
 	        eX = _poly[j].x - testSX;
 	        eY = _poly[j].y - testSY;
-
+	        
+	        //This is probably an ineffective duplicate of the edge-detection above.
 	        if ((sX == 0 && sY == 0 && eX == testEX && eY == testEY) || (eX == 0 && eY == 0 && sX == testEX && sY == testEY)) {
 	                return true;
 	        }
@@ -155,12 +156,6 @@ public class ShortestPath {
 	
 	  int     treeCount, i, j, bestI, bestJ;
 	  double  bestDist, newDist ;
-	
-	  //  Fail if either the startpoint or endpoint is outside the polygon set.
-	  //TODO: needs to be tolerant of edges
-	  /*if (!_poly.contains(sX, sY) || !_poly.contains(eX, eY)) {
-	        return false;
-	  }*/
 	
 	  //  If there is a straight-line solution, return with it immediately.
 	  if (lineInPolygon(sX,sY,eX,eY)) {
