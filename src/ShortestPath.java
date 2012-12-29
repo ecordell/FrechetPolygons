@@ -1,3 +1,4 @@
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
@@ -71,6 +72,40 @@ public class ShortestPath {
 		  }
 		  return odd;
 	}
+	 
+	/*private boolean lineInPolygon(double testSX, double testSY, double testEX, double testEY) {
+		for(int i = 0; i<_poly.length; i++) {
+			int j = i + 1;
+	        if (j >= _poly.length) {
+	            j = 0;
+	        }
+	        
+	        //check if part of the line is on an edge first
+	        double m1 = (_poly[j].y - _poly[i].y)/(_poly[j].x - _poly[i].x);
+	        double m2 = (testEY - testSY)/(testEX - testSX);
+	        
+	        //if line is on an edge then slopes will be very close
+	        if(getZero(m1 - m2) == 0) {
+	        	//get slope intercepts
+	        	double b1 = -m1 * _poly[i].x + _poly[i].y;
+	        	double b2 = -m2 * testSX + testSY;
+	        	double distance = Math.abs(b2 - b1)/Math.sqrt(m1*m1 +1);
+	        	//assume lines are parallel and check if distance is very small
+	        	if (getZero(distance) == 0) {
+	        		//see if
+	        		//skip this iteration, the at least part of the line lies on at least part of an edge. The other edges still need to be checked.
+	        		continue;
+	        	}
+	        } else {
+	        	//if part of the segment doesn't lie on part of an edge, then see if it intersects anything
+	        	if (Line2D.linesIntersect(_poly[i].x, _poly[i].y, _poly[j].x, _poly[j].y, testSX, testSY, testEX, testEY)) {
+	        		return false;
+	        	}
+	        }
+		}
+		return true;
+	}
+	*/
 	
 	private boolean lineInPolygon(double testSX, double testSY, double testEX, double testEY) {
 		double theCos, theSin, dist, sX, sY, eX, eY, rotSX, rotSY, rotEX, rotEY, crossX;
@@ -97,6 +132,7 @@ public class ShortestPath {
 				}
 			}
 		}
+
 		
 		testEX = testEX - testSX;
 		testEY = testEY - testSY;

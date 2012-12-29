@@ -16,17 +16,18 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	drawPanel = new PlotArea();
     	this.getContentPane().add(drawPanel);
     	this.addTestPolygons();
-    	Point2D.Double start = new Point2D.Double((polyQ[0].x+polyQ[3].x)/2,
-                (polyQ[0].y+polyQ[3].y)/2);
-    	Point2D.Double end = new Point2D.Double(polyQ[2].x, polyQ[2].y);
+    	Point2D.Double start = new Point2D.Double((polyQ[0].x+polyQ[1].x)/2,
+                (polyQ[0].y+polyQ[1].y)/2);
+    	Point2D.Double end = new Point2D.Double((polyQ[2].x+polyQ[3].x)/2,
+                (polyQ[2].y+polyQ[3].y)/2);
     	
-    	polyQ = this.polygonWithStartAndEndPointsInserted(polyQ, start, end);
+    	polyQ = this.insertPointIntoPolygon(this.insertPointIntoPolygon(polyQ, start), end);
     	
     	ShortestPath spCalculator = new ShortestPath(polyQ, start, end);
     	drawPanel.spPath = spCalculator.getPath();
 	}
 	
-	private Point2D.Double[] polygonWithStartAndEndPointsInserted(Point2D.Double[] poly, Point2D.Double start, Point2D.Double end) {
+	private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
 		//Iterate through all edges
 		for (int i = 0; i < poly.length; i++) {
 			int j = i + 1;
@@ -35,23 +36,16 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 			}
 			//if distance from point to edge is small, insert point between the vertices making up that edge
 			double denominator = Math.sqrt((poly[j].x - poly[i].x)*(poly[j].x - poly[i].x) + (poly[j].y - poly[i].y)*(poly[j].y - poly[i].y));
-			double startNumerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - start.y) - (poly[i].x - start.x)*(poly[j].y - poly[i].y));
-			double endNumerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - end.y) - (poly[i].x - end.x)*(poly[j].y - poly[i].y));
+			double numerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - point.y) - (poly[i].x - point.x)*(poly[j].y - poly[i].y));
 			
 			//TODO: these should probably be linked lists to avoid annoying/slow array resizing
-			//Note: this is an else if, because they should only both be true if the start and end points are both on an edge, which should never happen
 			Point2D.Double[] newPolygon = new Point2D.Double[poly.length + 1];
-			if (getZero(startNumerator/denominator) == 0) {
+			if (getZero(numerator/denominator) == 0) {
 				System.arraycopy(poly, 0, newPolygon, 0, j);
-				newPolygon[j] = start;
+				newPolygon[j] = point;
 				System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
 				return newPolygon;
 				
-			} else if (getZero(endNumerator/denominator) == 0) {
-				System.arraycopy(poly, 0, newPolygon, 0, j);
-				newPolygon[j] = end;
-				System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
-				return newPolygon;
 			} 
 		}
 		return poly;
