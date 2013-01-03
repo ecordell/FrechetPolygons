@@ -1,9 +1,20 @@
 import javax.swing.*;
+
+import org.poly2tri.*;
+import org.poly2tri.geometry.polygon.*;
+import org.poly2tri.geometry.polygon.Polygon;
+import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.ListIterator;
+
 
 public class PolygonInputFrame extends JFrame implements ActionListener {
 	PlotArea drawPanel;
@@ -25,6 +36,22 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	
     	ShortestPath spCalculator = new ShortestPath(polyQ, start, end);
     	drawPanel.spPath = spCalculator.getPath();
+    	
+    	
+    	ArrayList<PolygonPoint> points = new ArrayList<PolygonPoint>();
+    	for (int i = 0; i < polyP.length; i++) {
+    		Point2D.Double point = polyP[i];
+    		points.add(new PolygonPoint(point.x, point.y));
+    	}
+    	
+    	Polygon poly = new Polygon(points);
+    	Poly2Tri.triangulate(poly);
+    	
+    	ArrayList<DelaunayTriangle> triangulation = new ArrayList<DelaunayTriangle>();
+    	triangulation = (ArrayList<DelaunayTriangle>) poly.getTriangles();
+    	
+    	drawPanel.triangulation = triangulation;
+
 	}
 	
 	private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
@@ -111,6 +138,8 @@ class PlotArea extends JPanel{
 	private double xmax = 2;
 	private double ymin = -2;
 	private double ymax = 2;
+	public ArrayList<DelaunayTriangle> triangulation;
+	
 	public PlotArea(){
 		super();
 		this.setSize(400, 400);
@@ -123,6 +152,16 @@ class PlotArea extends JPanel{
 		drawPolygon(polyQ, g);
 		if (spPath != null) {
 			drawPath(spPath, g);
+		}
+		g.setColor(Color.orange);
+		if (triangulation != null) {
+			Iterator<DelaunayTriangle> itr = triangulation.iterator();
+			while(itr.hasNext()) {
+				DelaunayTriangle t = (DelaunayTriangle) itr.next();
+				Point2D.Double[] converted = {new Point2D.Double(t.points[0].getX(), t.points[0].getY()), new Point2D.Double(t.points[1].getX(), t.points[1].getY()), new Point2D.Double(t.points[2].getX(), t.points[2].getY())};
+	    	    drawPolygon(converted, g);
+	    	    System.out.println("Triangulation Triangle: " + Arrays.toString(converted));
+			}
 		}
     	super.paintComponents(g);
 	}
