@@ -7,16 +7,14 @@ import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 
 public class PolygonInputFrame extends JFrame implements ActionListener {
+
 	PlotArea drawPanel;
 	ControlArea buttonPanel;
 	Point2D.Double[] polyP;
@@ -51,6 +49,9 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	triangulation = (ArrayList<DelaunayTriangle>) poly.getTriangles();
     	
     	drawPanel.triangulation = triangulation;
+    	
+    	BaseReachabilityGraph graph = new BaseReachabilityGraph(polyP, polyQ, 1.5);
+    	
 
 	}
 	

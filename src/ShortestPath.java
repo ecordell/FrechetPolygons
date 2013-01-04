@@ -111,7 +111,7 @@ public class ShortestPath {
 		double theCos, theSin, dist, sX, sY, eX, eY, rotSX, rotSY, rotEX, rotEY, crossX;
 		
 		//Edge detection
-		//Todo: make better. Probably should change array to a hash or list
+		//TODO: make better. Probably should change array to a hash or list
 		//In fact all of this could be improved by assuming start and end are vertices, and referring to by index.
 		//Then they're adjacent if difference of indices = 1
 		for(int i = 0; i<_poly.length; i++) {
