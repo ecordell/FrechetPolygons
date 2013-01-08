@@ -19,7 +19,7 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 	ControlArea buttonPanel;
 	Point2D.Double[] polyP;
 	Point2D.Double[] polyQ;
-	
+
 	public PolygonInputFrame() {
     	super("Frechet Distance - Simple Polygons");
     	drawPanel = new PlotArea();
@@ -29,32 +29,30 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
                 (polyQ[0].y+polyQ[1].y)/2);
     	Point2D.Double end = new Point2D.Double((polyQ[2].x+polyQ[3].x)/2,
                 (polyQ[2].y+polyQ[3].y)/2);
-    	
+
     	polyQ = this.insertPointIntoPolygon(this.insertPointIntoPolygon(polyQ, start), end);
-    	
+
     	ShortestPath spCalculator = new ShortestPath(polyQ, start, end);
     	drawPanel.spPath = spCalculator.getPath();
-    	
-    	
+
+
     	ArrayList<PolygonPoint> points = new ArrayList<PolygonPoint>();
     	for (int i = 0; i < polyP.length; i++) {
     		Point2D.Double point = polyP[i];
     		points.add(new PolygonPoint(point.x, point.y));
     	}
-    	
+
     	Polygon poly = new Polygon(points);
     	Poly2Tri.triangulate(poly);
-    	
+
     	ArrayList<DelaunayTriangle> triangulation = new ArrayList<DelaunayTriangle>();
     	triangulation = (ArrayList<DelaunayTriangle>) poly.getTriangles();
-    	
-    	drawPanel.triangulation = triangulation;
-    	
-    	BaseReachabilityGraph graph = new BaseReachabilityGraph(polyP, polyQ, 1.5);
-    	
 
+    	drawPanel.triangulation = triangulation;
+
+    	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 1.85);
 	}
-	
+
 	private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
 		//Iterate through all edges
 		for (int i = 0; i < poly.length; i++) {
@@ -65,7 +63,7 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 			//if distance from point to edge is small, insert point between the vertices making up that edge
 			double denominator = Math.sqrt((poly[j].x - poly[i].x)*(poly[j].x - poly[i].x) + (poly[j].y - poly[i].y)*(poly[j].y - poly[i].y));
 			double numerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - point.y) - (poly[i].x - point.x)*(poly[j].y - poly[i].y));
-			
+
 			//TODO: these should probably be linked lists to avoid annoying/slow array resizing
 			Point2D.Double[] newPolygon = new Point2D.Double[poly.length + 1];
 			if (getZero(numerator/denominator) == 0) {
@@ -73,12 +71,12 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 				newPolygon[j] = point;
 				System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
 				return newPolygon;
-				
-			} 
+
+			}
 		}
 		return poly;
 	}
-	
+
 	private double getZero(double x) {
 		double testPositiveZero = 0.00000000001;
 		double testNegativeZero = -0.00000000001;
@@ -87,25 +85,25 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 		}
 		return x;
 	}
-	
+
 	private void addTestPolygons() {
 		polyP = new Point2D.Double[4];
 		polyP[0] = new Point2D.Double(-1, -1);
 		polyP[1] = new Point2D.Double(0, 1);
 		polyP[2] = new Point2D.Double(1, -1);
 		polyP[3] = new Point2D.Double(0, 0.6);
-		
+
 		drawPanel.polyP = polyP;
-		
+
 		polyQ = new Point2D.Double[4];
 		polyQ[0] = new Point2D.Double(-1, 1);
 		polyQ[1] = new Point2D.Double(0, -1);
 		polyQ[2] = new Point2D.Double(1, 1);
 		polyQ[3] = new Point2D.Double(0, -0.6);
- 
+
     	drawPanel.polyQ = polyQ;
 	}
-	
+
 	/**
 	 * @param args
 	 */
@@ -117,11 +115,11 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e){
-		
+
     }
-	
+
 	public void mouseClicked(MouseEvent e) {
-		
+
 	}
 }
 
@@ -140,13 +138,13 @@ class PlotArea extends JPanel{
 	private double ymin = -2;
 	private double ymax = 2;
 	public ArrayList<DelaunayTriangle> triangulation;
-	
+
 	public PlotArea(){
 		super();
 		this.setSize(400, 400);
 	}
 	public void paint(Graphics g)
-	{	
+	{
 		g.setColor(Color.blue);
 		drawPolygon(polyP, g);
 		g.setColor(Color.red);
@@ -166,11 +164,11 @@ class PlotArea extends JPanel{
 		}
     	super.paintComponents(g);
 	}
-	
+
 	public void drawPolygon (Point2D.Double[] points, Graphics g) {
 		Point[] screenPoints = new Point[points.length];
 		for (int i = 0; i<points.length; i++) {
-			screenPoints[i] = new Point(toScreenX(points[i].x), toScreenY(points[i].y));		
+			screenPoints[i] = new Point(toScreenX(points[i].x), toScreenY(points[i].y));
 		}
 		for (int i = 0; i<screenPoints.length; i++) {
 			int j = i + 1;
@@ -180,16 +178,16 @@ class PlotArea extends JPanel{
 			g.drawLine(screenPoints[i].x, screenPoints[i].y, screenPoints[j].x, screenPoints[j].y);
 		}
 	}
-	
+
 	public void drawPath(Point2D.Double[] points, Graphics g) {
 		g.setColor(Color.green);
 		for (int i = 0; i< points.length - 1; i++) {
 			g.drawLine(toScreenX(points[i].x), toScreenY(points[i].y), toScreenX(points[i+1].x), toScreenY(points[i+1].y));
 		}
 	}
-	
+
 	public double toMathX(int x)
-	{ 
+	{
 	    return (x - (this.getWidth()) / 2) * ((xmax - xmin) / (this.getWidth())) + ((xmax + xmin) / 2);
 	}
 	public double toMathY(int y)
