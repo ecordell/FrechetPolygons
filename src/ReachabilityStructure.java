@@ -1,9 +1,6 @@
-import apple.laf.JRSUIConstants;
-import com.sun.istack.internal.FinalArrayList;
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.Polygon;
 import org.poly2tri.geometry.polygon.PolygonPoint;
-import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
 
@@ -71,6 +68,12 @@ class Interval {
         Point2D.Double segmentEnd = poly[segmentEndIndex];
         double x = (1 - end)*segmentStart.x + end*segmentEnd.x;
         double y = (1 - end)*segmentStart.y + end*segmentEnd.y;
+        return new Point2D.Double(x, y);
+    }
+
+    public Point2D.Double getPolygonMidpoint(Point2D.Double[] poly) {
+        double x = (this.getPolygonStart(poly).x + this.getPolygonEnd(poly).x) / 2;
+        double y = (this.getPolygonStart(poly).y + this.getPolygonEnd(poly).y) / 2;
         return new Point2D.Double(x, y);
     }
 
@@ -221,17 +224,20 @@ class DiagonalTree {
             return (children.size() > 0);
         }
 
-        public boolean childrenHaveChildren() {
-            if (hasChildren()) {
-                for (DiagonalNode child : children) {
-                    if (child.hasChildren()) {
-                        return true;
-                    }
+        public void print() {
+            print("", true);
+        }
+
+        private void print(String prefix, boolean isTail) {
+            System.out.println(prefix + (isTail ? "└── " : "├── ") + "(" + data.startIndex + " - " + data.endIndex + ")");
+            if (children != null) {
+                for (int i = 0; i < children.size() - 1; i++) {
+                    children.get(i).print(prefix + (isTail ? "    " : "│   "), false);
                 }
-            } else {
-                return false;
+                if (children.size() >= 1) {
+                    children.get(children.size() - 1).print(prefix + (isTail ?"    " : "│   "), true);
+                }
             }
-            return false;
         }
     }
 
@@ -280,6 +286,10 @@ class DiagonalTree {
             toBeInserted.parent = parentNode;
         }
     }
+
+    void print() {
+        root.print();
+    }
 }
 
 class Diagonal {
@@ -325,6 +335,7 @@ public class ReachabilityStructure {
 	Point2D.Double[] borderPolyP;
 	Point2D.Double[] borderPolyQ;
     ArrayList<Layer> layers;
+    double _epsilon;
 
 	//Construct base reachability graph from polygons
 	public ReachabilityStructure(Point2D.Double[] polyP, Point2D.Double[] polyQ, double epsilon) {
@@ -338,17 +349,15 @@ public class ReachabilityStructure {
 		System.arraycopy(polyP, 0, borderPolyP, polyP.length, polyP.length);
 		borderPolyQ = new Point2D.Double[polyQ.length];
 		System.arraycopy(polyQ, 0, borderPolyQ, 0, polyQ.length);
+        _epsilon = epsilon;
 
-
-		Layer zeroLayer = createLayerZero(epsilon);
+		Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, epsilon);
 		int ctr = 0;
 		for (int i = 0; i < borderPolyP.length - 1; i++) {
-			//for (int j = 0; j < borderPolyQ.length - 1; j++) {
 				for (Arrow arrow : zeroLayer.arrows.get(i).get(0)) {
 					System.out.println(arrow.toString());
 					ctr ++;
 				}
-			//}
 		}
 		System.out.println("Total number of intervals: " + ctr);
 		layers = new ArrayList<Layer>();
@@ -359,76 +368,76 @@ public class ReachabilityStructure {
          return null;
     }
 
-	Layer createLayerZero(double epsilon) {
-		Layer layerZero = new Layer();
-		layerZero.level = 0;
-		layerZero.arrows = new ArrayList<ArrayList<Set<Arrow>>>();
+    Layer createBaseLayer(Point2D.Double[] polyX, Point2D.Double[] polyY, double epsilon) {
+        Layer layerZero = new Layer();
+        layerZero.level = 0;
+        layerZero.arrows = new ArrayList<ArrayList<Set<Arrow>>>();
 
-		//First build a list of intervals and find the arrows only within each cell
-		for (int i = 0; i < borderPolyP.length - 1; i++) {
-			ArrayList<Set<Arrow>> column = new ArrayList<Set<Arrow>>();
-			layerZero.arrows.add(column);
-			for (int j = 0; j < borderPolyQ.length - 1; j++) {
-				//P on the x-axis, Q on the y-axis
+        //First build a list of intervals and find the arrows only within each cell
+        for (int i = 0; i < polyX.length - 1; i++) {
+            ArrayList<Set<Arrow>> column = new ArrayList<Set<Arrow>>();
+            layerZero.arrows.add(column);
+            for (int j = 0; j < polyY.length - 1; j++) {
+                //P on the x-axis, Q on the y-axis
 
-				//get the segments for each side of a cell so we can construct the arrows
-				//TODO: make calls simpler by passing an enum of L, R, T, B. Then i, j only needed to be passed once and the method can infer the rest.
-				Interval left = freeSpaceForSegment(layerZero, borderPolyQ[j], borderPolyQ[j+1], borderPolyP[i], i, j, false, i, j, epsilon);
-				Interval right = freeSpaceForSegment(layerZero, borderPolyQ[j], borderPolyQ[j+1], borderPolyP[i+1], i+1, j, false, i, j, epsilon);
-				Interval top = freeSpaceForSegment(layerZero, borderPolyP[i], borderPolyP[i+1], borderPolyQ[j+1], i, j+1, true, i, j, epsilon);
-				Interval bottom = freeSpaceForSegment(layerZero, borderPolyP[i], borderPolyP[i+1], borderPolyQ[j], i, j, true, i, j, epsilon);
+                //get the segments for each side of a cell so we can construct the arrows
+                //TODO: make calls simpler by passing an enum of L, R, T, B. Then i, j only needed to be passed once and the method can infer the rest.
+                Interval left = freeSpaceForSegment(layerZero, polyY[j], polyY[j+1], polyX[i], i, j, false, i, j, epsilon);
+                Interval right = freeSpaceForSegment(layerZero, polyY[j], polyY[j+1], polyX[i+1], i+1, j, false, i, j, epsilon);
+                Interval top = freeSpaceForSegment(layerZero, polyX[i], polyX[i+1], polyY[j+1], i, j+1, true, i, j, epsilon);
+                Interval bottom = freeSpaceForSegment(layerZero, polyX[i], polyX[i+1], polyY[j], i, j, true, i, j, epsilon);
 
-				//Build arrows and add to appropriate place in level
-				Set<Arrow> arrowSet = new HashSet<Arrow>();
+                //Build arrows and add to appropriate place in level
+                Set<Arrow> arrowSet = new HashSet<Arrow>();
 
-				if (left != null) {
-					if (right != null) {
-						Arrow arrow = new Arrow();
-						arrow.setStart(new Interval(left));
-						arrow.setEnd(new Interval(right));
-						arrow.subArrows = null;
+                if (left != null) {
+                    if (right != null) {
+                        Arrow arrow = new Arrow();
+                        arrow.setStart(new Interval(left));
+                        arrow.setEnd(new Interval(right));
+                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
-						arrowSet.add(arrow);
-					}
-					if (top != null) {
-						Arrow arrow = new Arrow();
-						arrow.setStart(new Interval(left));
-						arrow.setEnd(new Interval(top));
-						arrow.subArrows = null;
+                        arrowSet.add(arrow);
+                    }
+                    if (top != null) {
+                        Arrow arrow = new Arrow();
+                        arrow.setStart(new Interval(left));
+                        arrow.setEnd(new Interval(top));
+                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
-						arrowSet.add(arrow);
-					}
-				}
-				if (bottom != null) {
-					if (right != null) {
-						Arrow arrow = new Arrow();
-						arrow.setStart(new Interval(bottom));
-						arrow.setEnd(new Interval(right));
-						arrow.subArrows = null;
+                        arrowSet.add(arrow);
+                    }
+                }
+                if (bottom != null) {
+                    if (right != null) {
+                        Arrow arrow = new Arrow();
+                        arrow.setStart(new Interval(bottom));
+                        arrow.setEnd(new Interval(right));
+                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
-						arrowSet.add(arrow);
-					}
-					if (top != null) {
-						Arrow arrow = new Arrow();
-						arrow.setStart(new Interval(bottom));
-						arrow.setEnd(new Interval(top));
-						arrow.subArrows = null;
+                        arrowSet.add(arrow);
+                    }
+                    if (top != null) {
+                        Arrow arrow = new Arrow();
+                        arrow.setStart(new Interval(bottom));
+                        arrow.setEnd(new Interval(top));
+                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
-						arrowSet.add(arrow);
-					}
-				}
+                        arrowSet.add(arrow);
+                    }
+                }
 
-				if (arrowSet.size() == 0) {
-					arrowSet = null;
-				}
-				column.add(arrowSet);
-			}
+                if (arrowSet.size() == 0) {
+                    arrowSet = null;
+                }
+                column.add(arrowSet);
+            }
             mergeCellsIntoColumn(column);
-		}
-		return layerZero;
-	}
+        }
+        return layerZero;
+    }
 
-	//This calculates the free space for a line segment, either horizontal or vertical.
+    //This calculates the free space for a line segment, either horizontal or vertical.
 	//The axisPoint indicates the point on the other curve which should be compared
 	//i.e. if we're comparing a segment on Q, then we look at one point on P (a vertical if P is on the x axis)
 	//this checks the current level and retrieves an existing interval if it's already computed
@@ -544,18 +553,6 @@ public class ReachabilityStructure {
                 for (Arrow sub : arrow.subArrows) {
                     enforceMonotonicity(sub);
                 }
-            }
-        }
-    }
-
-    void createUpperLayers(Point2D.Double startPoint) {
-        //find start arrows in level zero
-        //startInterval.startGraph.x should be between x0 and x0+1, where x0 is the number of the cell
-        Set<Arrow> arrowSet = layers.get(0).arrows.get((int) Math.floor(startPoint.x)).get(0);
-
-        for (Arrow arrow : arrowSet) {
-            if (arrow.start.contains(startPoint)) {
-                //found one
             }
         }
     }
@@ -707,6 +704,8 @@ public class ReachabilityStructure {
             }
             diagonalTree.subdivideDiagonals();
 
+            diagonalTree.print();
+
             return diagonalTree;
         }
         return null;
@@ -777,9 +776,6 @@ public class ReachabilityStructure {
     }
 
     Set<Arrow> reachabilityStructureFromPoint(Point2D.Double startPoint) {
-        int startIndex =  (int) Math.floor(startPoint.x);
-        Set<Arrow> column = layers.get(0).arrows.get(startIndex).get(0);
-
         DiagonalTree diagonalTree = diagonalTreeForPoint(startPoint);
         this.layers.add(1, new Layer(layers.get(0)));
 
@@ -802,7 +798,11 @@ public class ReachabilityStructure {
             for (DiagonalTree.DiagonalNode child : node.parent.children) {
                 columns.add(layers.get(1).arrows.get(child.data.startIndex));
             }
-            return mergeColumns(columns);
+            if (node.parent.parent == null) { //root node, don't prune
+                return mergeColumns(columns);
+            } else {
+                return pruneInvalidIntervalsFromColumn(mergeColumns(columns), node.parent.data);
+            }
         }
         return null;
     }
@@ -810,8 +810,83 @@ public class ReachabilityStructure {
     ArrayList<Set<Arrow>> mergeColumns(ArrayList<ArrayList<Set<Arrow>>> columns) {
         ArrayList<Set<Arrow>> finalColumn = columns.get(0);
         for (int i = 1; i < columns.size(); i++) {
-            finalColumn = mergeTwoColumns(finalColumn, columns.get(1));
+            finalColumn = mergeTwoColumns(finalColumn, columns.get(i));
         }
+
         return finalColumn;
     }
+
+    ArrayList<Set<Arrow>> pruneInvalidIntervalsFromColumn(ArrayList<Set<Arrow>> column, Diagonal diagonal) {
+        ArrayList<Set<Arrow>> columnCopy = new ArrayList<Set<Arrow>>(column);
+
+        for (Arrow arrow : columnCopy.get(0)) {
+            if (arrow.start.isVertical() && arrow.end.isVertical()) {
+                Point2D.Double startPoint = arrow.start.getPolygonMidpoint(borderPolyQ);
+                Point2D.Double endPoint = arrow.end.getPolygonMidpoint(borderPolyQ);
+                ShortestPath spCalculator = new ShortestPath(insertPointIntoPolygon(insertPointIntoPolygon(originalPolyQ, startPoint), endPoint), startPoint, endPoint);
+                //TODO: can this fail for midpoints but not for other points in the interval?
+                if (spCalculator.getPath() != null) {
+                    //get diagonal path
+                    Point2D.Double[] diagonalPath = {borderPolyP[diagonal.startIndex], borderPolyP[diagonal.endIndex]};
+                    //get shortest path
+                    Point2D.Double[] shortestPath = spCalculator.getPath();
+
+                    //find frechet distance between them
+                    Layer reachability = createBaseLayer(diagonalPath, shortestPath, _epsilon);
+
+                    Set<Arrow> finalArrows;
+                    for (ArrayList<Set<Arrow>> c : reachability.arrows) {
+                        mergeCellsIntoColumn(c);
+                    }
+                    finalArrows = mergeColumns(reachability.arrows).get(0);
+
+                    boolean isPath = false;
+                    for (Arrow a : finalArrows) {
+                        if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, 1))) {
+                              //exists a path from start to end
+                              isPath = true;
+                        }
+                    }
+                    if (!isPath) {
+                        //if frechet distance is too big between diagonal and sp, then we remove the arrow.
+                        column.remove(arrow);
+                    }
+                }
+            }
+        }
+        return column;
+    }
+
+    private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
+        //Iterate through all edges
+        for (int i = 0; i < poly.length; i++) {
+            int j = i + 1;
+            if (j >= poly.length) {
+                j = 0;
+            }
+            //if distance from point to edge is small, insert point between the vertices making up that edge
+            double denominator = Math.sqrt((poly[j].x - poly[i].x)*(poly[j].x - poly[i].x) + (poly[j].y - poly[i].y)*(poly[j].y - poly[i].y));
+            double numerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - point.y) - (poly[i].x - point.x)*(poly[j].y - poly[i].y));
+
+            Point2D.Double[] newPolygon = new Point2D.Double[poly.length + 1];
+            if (getZero(numerator/denominator) == 0) {
+                System.arraycopy(poly, 0, newPolygon, 0, j);
+                newPolygon[j] = point;
+                System.arraycopy(poly, j, newPolygon, j+1, poly.length-j);
+                return newPolygon;
+
+            }
+        }
+        return poly;
+    }
+
+    private double getZero(double x) {
+        double testPositiveZero = 0.00000000001;
+        double testNegativeZero = -0.00000000001;
+        if (x >= testNegativeZero && x <= testPositiveZero) {
+            x = 0;
+        }
+        return x;
+    }
+
 }

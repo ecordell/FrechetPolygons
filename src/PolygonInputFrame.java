@@ -51,6 +51,7 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	drawPanel.triangulation = triangulation;
 
     	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 1.85);
+        graph.reachabilityStructureFromPoint()
 	}
 
 	private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
@@ -64,7 +65,6 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 			double denominator = Math.sqrt((poly[j].x - poly[i].x)*(poly[j].x - poly[i].x) + (poly[j].y - poly[i].y)*(poly[j].y - poly[i].y));
 			double numerator = Math.abs((poly[j].x - poly[i].x)*(poly[i].y - point.y) - (poly[i].x - point.x)*(poly[j].y - poly[i].y));
 
-			//TODO: these should probably be linked lists to avoid annoying/slow array resizing
 			Point2D.Double[] newPolygon = new Point2D.Double[poly.length + 1];
 			if (getZero(numerator/denominator) == 0) {
 				System.arraycopy(poly, 0, newPolygon, 0, j);
