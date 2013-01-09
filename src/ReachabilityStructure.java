@@ -77,6 +77,14 @@ class Interval {
         return new Point2D.Double(x, y);
     }
 
+    public Point2D.Double getMidpoint() {
+        if (isVertical()) {
+            return new Point2D.Double(startGraph.x, (startGraph.y + endGraph.y) /2);
+        } else {
+            return new Point2D.Double((startGraph.x + endGraph.x) / 2, startGraph.y);
+        }
+    }
+
     public boolean contains(Point2D.Double point) {
         if (point.x == startGraph.x && point.x == endGraph.x) {
             if (point.y >= startGraph.y && point.y <= endGraph.y) {
@@ -364,8 +372,44 @@ public class ReachabilityStructure {
         layers.add(zeroLayer);
     }
 
-    public Point2D.Double[] getPathForStartInterval(Interval start) {
-         return null;
+    public Point2D.Double[] getFirstReachablePath() {
+        for (ArrayList<Set<Arrow>> column : layers.get(0).arrows) {
+            for (Arrow arrow : column.get(0)) {
+                if (!arrow.start.isVertical()) {
+                    Arrow topArrow = reachabilityStructureFromPoint(arrow.start.getMidpoint());
+                    return pathFromArrow(topArrow);
+                }
+            }
+        }
+        return null;
+    }
+
+    Point2D.Double[] pathFromArrow(Arrow arrow) {
+        Set<Arrow> arrowSet = allSubArrows(arrow);
+        Set<Point2D.Double> intervalSet = new HashSet<Point2D.Double>();
+
+        for (Arrow a : arrowSet) {
+            intervalSet.add(a.start.getMidpoint());
+            intervalSet.add(a.end.getMidpoint());
+        }
+
+        Point2D.Double[] result = (Point2D.Double[]) intervalSet.toArray();
+        Arrays.sort(result);
+        return result;
+    }
+
+    Set<Arrow> allSubArrows(Arrow arrow) {
+        if (arrow.subArrows != null && arrow.subArrows.size() > 0) {
+            Set<Arrow> arrowSet = new HashSet<Arrow>();
+            for (Arrow sub : arrow.subArrows) {
+                arrowSet.addAll(allSubArrows(sub));
+            }
+            return arrowSet;
+        } else {
+            Set<Arrow> arrowSet = new HashSet<Arrow>();
+            arrowSet.add(arrow);
+            return arrowSet;
+        }
     }
 
     Layer createBaseLayer(Point2D.Double[] polyX, Point2D.Double[] polyY, double epsilon) {
@@ -684,6 +728,7 @@ public class ReachabilityStructure {
         for (Arrow arrow : column) {
             if (arrow.start.contains(startPoint)) {
                 validStart = true;
+                break;
             }
         }
         if (validStart) {
@@ -733,7 +778,7 @@ public class ReachabilityStructure {
         //NOTE: it's not clear how edges correspond to points here, but it's in the poly2tri source (no docs)
         for (DelaunayTriangle triangle : triangulation) {
             for (int i = 0; i < 3; i++) {
-                boolean isDiagonal = triangle.dEdge[i];
+                boolean isDiagonal = !triangle.cEdge[i];
                 if (isDiagonal) {
                     Point2D.Double first = new Point2D.Double(triangle.points[(i + 1) % 3].getX(), triangle.points[(i + 1) % 3].getY());
                     Point2D.Double second = new Point2D.Double(triangle.points[(i + 2) % 3].getX(), triangle.points[(i + 2) % 3].getY());
@@ -746,7 +791,7 @@ public class ReachabilityStructure {
 
                     Diagonal newDiagonal = new Diagonal(indices[0], indices[1]);
 
-                    if(diagonals.indexOf(newDiagonal) != -1) {
+                    if(diagonals.indexOf(newDiagonal) == -1) {
                         diagonals.add(newDiagonal);
                     }
 
@@ -754,8 +799,11 @@ public class ReachabilityStructure {
             }
         }
 
+        System.out.println("Number of diagonals: "  + diagonals.size());
+
+        int max = diagonals.size();
         //since P is doubled, add other possible diagonal indices
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < max; i++) {
             Diagonal d = diagonals.get(i);
             diagonals.add(new Diagonal(d.endIndex, length + d.startIndex));
             diagonals.add(new Diagonal(length + d.startIndex, length + d.endIndex));
@@ -775,13 +823,13 @@ public class ReachabilityStructure {
         return diagonals;
     }
 
-    Set<Arrow> reachabilityStructureFromPoint(Point2D.Double startPoint) {
+    Arrow reachabilityStructureFromPoint(Point2D.Double startPoint) {
         DiagonalTree diagonalTree = diagonalTreeForPoint(startPoint);
         this.layers.add(1, new Layer(layers.get(0)));
 
         //TODO: rework the layers idea. don't really need them now, just need one base layer and create a new top layer for each query
         if (diagonalTree != null) {
-            return mergeChildren(diagonalTree.root()).get(0);
+            return (Arrow) mergeChildren(diagonalTree.root()).get(0).toArray()[0];
         } else {
             return null;
         }

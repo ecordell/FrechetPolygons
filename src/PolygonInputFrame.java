@@ -50,8 +50,16 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
 
     	drawPanel.triangulation = triangulation;
 
-    	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 1.85);
-        graph.reachabilityStructureFromPoint()
+    	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 3);
+        Point2D.Double[] path = graph.getFirstReachablePath();
+
+        System.out.println("Path: ");
+        if (path != null)
+        {
+            for (Point2D.Double point : path) {
+                System.out.println(point);
+            }
+        }
 	}
 
 	private Point2D.Double[] insertPointIntoPolygon(Point2D.Double[] poly, Point2D.Double point) {
