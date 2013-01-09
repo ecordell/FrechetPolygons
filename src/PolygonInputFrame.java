@@ -30,7 +30,7 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	Point2D.Double end = new Point2D.Double((polyQ[2].x+polyQ[3].x)/2,
                 (polyQ[2].y+polyQ[3].y)/2);
 
-    	polyQ = this.insertPointIntoPolygon(this.insertPointIntoPolygon(polyQ, start), end);
+    	/*polyQ = this.insertPointIntoPolygon(this.insertPointIntoPolygon(polyQ, start), end);
 
     	ShortestPath spCalculator = new ShortestPath(polyQ, start, end);
     	drawPanel.spPath = spCalculator.getPath();
@@ -48,9 +48,9 @@ public class PolygonInputFrame extends JFrame implements ActionListener {
     	ArrayList<DelaunayTriangle> triangulation = new ArrayList<DelaunayTriangle>();
     	triangulation = (ArrayList<DelaunayTriangle>) poly.getTriangles();
 
-    	drawPanel.triangulation = triangulation;
+    	drawPanel.triangulation = triangulation;    */
 
-    	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 3);
+    	ReachabilityStructure graph = new ReachabilityStructure(polyP, polyQ, 5);
         Point2D.Double[] path = graph.getFirstReachablePath();
 
         System.out.println("Path: ");

@@ -9,333 +9,6 @@ import java.util.*;
 
 
 //TODO: only calculate columns once, then double. This saves a LOT of calculation
-class Interval {
-	//normalized
-	Point2D.Double startGraph;
-	Point2D.Double endGraph;
-
-	@Override public String toString() {
-		return "Start: (" + startGraph.x + ", " + startGraph.y + ") End: (" + endGraph.x + ", " + endGraph.y + ")";
-	}
-
-    public Interval() {
-       this.startGraph = null;
-       this.endGraph = null;
-    }
-
-    public Interval(Interval another) {
-        this.startGraph = another.startGraph;
-        this.endGraph = another.endGraph;
-    }
-
-    public Interval(Point2D.Double start, Point2D.Double end) {
-        this.startGraph = start;
-        this.endGraph = end;
-    }
-
-    public Point2D.Double getPolygonStart(Point2D.Double[] poly) {
-        double start;
-        if (startGraph.x - endGraph.x == 0) {
-            start = startGraph.y;
-        } else {
-            start = startGraph.x;
-        }
-        int segmentStartIndex = (int) Math.floor(start);
-        if (segmentStartIndex < 0 || segmentStartIndex >= poly.length - 1)    {
-            System.out.println("Error converting graph point to polygon point.");
-            return null;
-        }
-        Point2D.Double segmentStart = poly[segmentStartIndex];
-        Point2D.Double segmentEnd = poly[segmentStartIndex + 1];
-        double x = (1 - start)*segmentStart.x + start*segmentEnd.x;
-        double y = (1 - start)*segmentStart.y + start*segmentEnd.y;
-        return new Point2D.Double(x, y);
-    }
-
-    public Point2D.Double getPolygonEnd(Point2D.Double[] poly) {
-        double end;
-        if (startGraph.x - endGraph.x == 0) {
-            end = endGraph.y;
-        } else {
-            end = endGraph.x;
-        }
-        int segmentEndIndex = (int) Math.floor(end);
-        if (segmentEndIndex < 1 || segmentEndIndex >= poly.length)    {
-            System.out.println("Error converting graph point to polygon point.");
-            return null;
-        }
-        Point2D.Double segmentStart = poly[segmentEndIndex - 1];
-        Point2D.Double segmentEnd = poly[segmentEndIndex];
-        double x = (1 - end)*segmentStart.x + end*segmentEnd.x;
-        double y = (1 - end)*segmentStart.y + end*segmentEnd.y;
-        return new Point2D.Double(x, y);
-    }
-
-    public Point2D.Double getPolygonMidpoint(Point2D.Double[] poly) {
-        double x = (this.getPolygonStart(poly).x + this.getPolygonEnd(poly).x) / 2;
-        double y = (this.getPolygonStart(poly).y + this.getPolygonEnd(poly).y) / 2;
-        return new Point2D.Double(x, y);
-    }
-
-    public Point2D.Double getMidpoint() {
-        if (isVertical()) {
-            return new Point2D.Double(startGraph.x, (startGraph.y + endGraph.y) /2);
-        } else {
-            return new Point2D.Double((startGraph.x + endGraph.x) / 2, startGraph.y);
-        }
-    }
-
-    public boolean contains(Point2D.Double point) {
-        if (point.x == startGraph.x && point.x == endGraph.x) {
-            if (point.y >= startGraph.y && point.y <= endGraph.y) {
-                return true;
-            }
-        } else {
-            if (point.x >= startGraph.x && point.x <= endGraph.x) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Interval other = (Interval) obj;
-        if (this.startGraph.x != other.startGraph.x || this.startGraph.y != other.startGraph.y ||
-                this.endGraph.x != other.endGraph.x || this.endGraph.y != other.endGraph.y) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + this.startGraph.hashCode();
-        hash = 53 * hash + this.endGraph.hashCode();
-        return hash;
-    }
-
-    public boolean intersects(Interval other) {
-        if (other.startGraph.x - other.endGraph.x == 0) {
-            if (this.startGraph.x - this.startGraph.x != 0) {
-                return false;
-            }
-            //vertical intervals
-            return (this.startGraph.y <= other.endGraph.y) && (other.startGraph.y <= this.endGraph.y);
-        } else {
-            if (this.startGraph.y - this.startGraph.y != 0) {
-                return false;
-            }
-            //horizontal intervals
-            return (this.startGraph.x <= other.endGraph.x) && (other.startGraph.x <= this.endGraph.x);
-        }
-    }
-
-    public Interval intersection(Interval other) {
-        if (other.startGraph.x - other.endGraph.x == 0) {
-            if (this.startGraph.x - this.startGraph.x != 0) {
-                return null;
-            }
-            //vertical intervals
-            return new Interval(new Point2D.Double(this.startGraph.x, Math.max(this.startGraph.y, other.startGraph.y)), new Point2D.Double(this.startGraph.x, Math.min(this.endGraph.y, other.endGraph.y)));
-        } else {
-            if (this.startGraph.y - this.startGraph.y != 0) {
-                return null;
-            }
-            //horizontal intervals
-            return new Interval(new Point2D.Double(Math.max(this.startGraph.x, other.startGraph.x), this.startGraph.y), new Point2D.Double(Math.min(this.endGraph.x, other.endGraph.x), this.startGraph.y));
-        }
-    }
-
-    public boolean isOnSameSegmentAs(Interval other) {
-        if (other.startGraph.x - other.endGraph.x == 0) {
-            if (this.startGraph.x - this.startGraph.x != 0) {
-                return false;
-            }
-        } else {
-            if (this.startGraph.y - this.startGraph.y != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isParallelTo(Interval other) {
-        return (this.startGraph.x - this.endGraph.x) + (other.startGraph.x - other.endGraph.x) == 0 ||
-             (this.startGraph.y - this.endGraph.y) + (other.startGraph.y - other.endGraph.y) == 0;
-    }
-
-    public boolean isVertical() {
-        return (this.startGraph.x - this.endGraph.x == 0);
-    }
-}
-
-
-
-class Arrow {
-	ArrayList<Arrow> subArrows;
-	Interval start;
-	Interval end;
-	@Override public String toString() {
-	    return "Arrow:\n\tFrom: " + start.toString() + "\n\tTo: " + end.toString();
-	}
-
-    public void setStart(Interval _start) {
-        this.start = _start;
-    }
-
-    public void setEnd(Interval _end) {
-        this.end = _end;
-    }
-}
-
-class Layer {
-	int level;
-
-	//two dimensional array of sets of arrows, corresponding to each cell of the FSD
-	ArrayList<ArrayList<Set<Arrow>>> arrows;
-
-    public Layer(Layer another) {
-        this.arrows = new ArrayList<ArrayList<Set<Arrow>>>(another.arrows);
-    }
-    public Layer() {
-        this.arrows = new ArrayList<ArrayList<Set<Arrow>>>();
-    }
-}
-
-//Tree for diagonal order
-class DiagonalTree {
-    private DiagonalNode root;
-
-    public DiagonalTree(Diagonal rootData) {
-        root = new DiagonalNode();
-        root.data = rootData;
-        root.children = new ArrayList<DiagonalNode>();
-    }
-
-    public DiagonalNode root(){
-        return root;
-    }
-    public static class DiagonalNode {
-        Diagonal data;
-        DiagonalNode parent;
-        ArrayList<DiagonalNode> children;
-
-        public boolean hasChildren() {
-            return (children.size() > 0);
-        }
-
-        public void print() {
-            print("", true);
-        }
-
-        private void print(String prefix, boolean isTail) {
-            System.out.println(prefix + (isTail ? "└── " : "├── ") + "(" + data.startIndex + " - " + data.endIndex + ")");
-            if (children != null) {
-                for (int i = 0; i < children.size() - 1; i++) {
-                    children.get(i).print(prefix + (isTail ? "    " : "│   "), false);
-                }
-                if (children.size() >= 1) {
-                    children.get(children.size() - 1).print(prefix + (isTail ?"    " : "│   "), true);
-                }
-            }
-        }
-    }
-
-    public void addDiagonal(Diagonal diag) {
-        DiagonalNode node = new DiagonalNode();
-        node.data = diag;
-        node.children = new ArrayList<DiagonalNode>();
-        insert(node, root);
-    }
-
-    public void subdivideDiagonals() {
-        //after all are added, split out the ends into their own nodes
-        divideDiagonalsOf(root);
-    }
-
-    void divideDiagonalsOf(DiagonalNode node) {
-        if (node.children.size() > 0) {
-            for (DiagonalNode n : node.children) {
-                divideDiagonalsOf(n);
-            }
-        } else {
-            int span = node.data.endIndex - node.data.startIndex;
-            if (span > 1) {
-               for (int i = 0; i < span; i++) {
-                   Diagonal newDiag = new Diagonal(node.data.startIndex + i, node.data.startIndex + i + 1);
-                   DiagonalNode newNode = new DiagonalNode();
-                   newNode.data = newDiag;
-                   newNode.children = new ArrayList<DiagonalNode>();
-                   newNode.parent = node;
-                   node.children.add(newNode);
-               }
-            }
-        }
-    }
-
-    void insert(DiagonalNode toBeInserted, DiagonalNode parentNode) {
-        if (parentNode.children.size() > 0) {
-            for (DiagonalNode node : parentNode.children) {
-                if (toBeInserted.data.containedWithin(node.data)) {
-                    insert(toBeInserted, node);
-                    break;
-                }
-            }
-        } else {
-            parentNode.children.add(toBeInserted);
-            toBeInserted.parent = parentNode;
-        }
-    }
-
-    void print() {
-        root.print();
-    }
-}
-
-class Diagonal {
-    int startIndex;
-    int endIndex;
-
-    public Diagonal(int start, int end) {
-        this.startIndex = start;
-        this.endIndex = end;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Diagonal other = (Diagonal) obj;
-        if (this.startIndex != other.startIndex || this.endIndex != other.endIndex) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + this.startIndex;
-        hash = 53 * hash + this.endIndex;
-        return hash;
-    }
-
-    public boolean containedWithin(Diagonal other) {
-        return (this.startIndex >= other.startIndex && this.endIndex <= other.endIndex);
-    }
-}
 
 public class ReachabilityStructure {
 	Point2D.Double[] originalPolyP;
@@ -377,7 +50,10 @@ public class ReachabilityStructure {
             for (Arrow arrow : column.get(0)) {
                 if (!arrow.start.isVertical()) {
                     Arrow topArrow = reachabilityStructureFromPoint(arrow.start.getMidpoint());
-                    return pathFromArrow(topArrow);
+                    Point2D.Double[] path = pathFromArrow(topArrow);
+                    if (path != null) {
+                        return path;
+                    }
                 }
             }
         }
@@ -615,7 +291,7 @@ public class ReachabilityStructure {
         //loop through arrows in adjacent cells and find the ones that connect
         for (Arrow topArrow : topCell) {
             for (Arrow bottomArrow : bottomCell) {
-                if (topArrow != null && bottomArrow != null && topArrow.start.isOnSameSegmentAs(bottomArrow.end)){
+                if (topArrow != null && bottomArrow != null) {
                     if(topArrow.start.intersects(bottomArrow.end)) {
                        //merge arrows
                         if(topArrow.end.isParallelTo(bottomArrow.start)) {
@@ -636,20 +312,11 @@ public class ReachabilityStructure {
                                     newArrow.setEnd(topArrow.end);
                                     enforceMonotonicity(newArrow);
                                 }
-                            } else {
-                                topArrow = null;
-                                bottomArrow = null;
                             }
                             if (newArrow != null) {
                                 mergedCell.add(newArrow);
                             }
                         }
-                    } else {
-                       //null it out
-                       // (this works because each arrow on level zero gets its own copy of the original interval, no stepping on other arrow's toes)
-                       //but if this causes problems just removing it should be fine, the garbage collector should take care of them
-                       topArrow = null;
-                       bottomArrow = null;
                     }
                 }
             }
@@ -675,7 +342,7 @@ public class ReachabilityStructure {
         //loop through arrows in adjacent columns and find the ones that connect
         for (Arrow leftArrow : leftColumn) {
             for (Arrow rightArrow : rightColumn) {
-                if (leftArrow.start.isOnSameSegmentAs(rightArrow.end)){
+                if (leftArrow != null && rightArrow != null) {
                     if(leftArrow.start.intersects(rightArrow.end)) {
                         //merge arrows
                         if(leftArrow.end.isParallelTo(rightArrow.start)) {
