@@ -113,16 +113,16 @@ public class ReachabilityStructure {
                 if (left != null) {
                     if (right != null) {
                         Arrow arrow = new Arrow();
-                        arrow.setStart(new Interval(left));
-                        arrow.setEnd(new Interval(right));
+                        arrow.start = new Interval(left);
+                        arrow.end = new Interval(right);
                         arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
                     if (top != null) {
                         Arrow arrow = new Arrow();
-                        arrow.setStart(new Interval(left));
-                        arrow.setEnd(new Interval(top));
+                        arrow.start = new Interval(left);
+                        arrow.end = new Interval(top);
                         arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
@@ -131,16 +131,16 @@ public class ReachabilityStructure {
                 if (bottom != null) {
                     if (right != null) {
                         Arrow arrow = new Arrow();
-                        arrow.setStart(new Interval(bottom));
-                        arrow.setEnd(new Interval(right));
+                        arrow.start = new Interval(bottom);
+                        arrow.end = new Interval(right);
                         arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
                     if (top != null) {
                         Arrow arrow = new Arrow();
-                        arrow.setStart(new Interval(bottom));
-                        arrow.setEnd(new Interval(top));
+                        arrow.start = new Interval(bottom);
+                        arrow.end = new Interval(top);
                         arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
@@ -291,36 +291,41 @@ public class ReachabilityStructure {
         //loop through arrows in adjacent cells and find the ones that connect
         for (Arrow topArrow : topCell) {
             for (Arrow bottomArrow : bottomCell) {
-                if (topArrow != null && bottomArrow != null) {
-                    if(topArrow.start.intersects(bottomArrow.end)) {
-                       //merge arrows
-                        if(topArrow.end.isParallelTo(bottomArrow.start)) {
-                            //if end and middle are parallel, we need to project monotonicity
-                            //monotonicity is already enforced within a single cell
-                            Interval middle = topArrow.start.intersection(bottomArrow.end);
-                            Arrow newArrow = new Arrow();
-                            if (middle != null) {
-                                topArrow.setStart(middle);
-                                bottomArrow.setEnd(middle);
-                                enforceMonotonicity(topArrow); //TODO: do we need these since enforce is recursive?
-                                enforceMonotonicity(bottomArrow);
-                                if (topArrow != null && bottomArrow != null) {
-                                    newArrow.subArrows = new ArrayList<Arrow>();
-                                    newArrow.subArrows.add(topArrow);
-                                    newArrow.subArrows.add(bottomArrow);
-                                    newArrow.setStart(bottomArrow.start);
-                                    newArrow.setEnd(topArrow.end);
-                                    enforceMonotonicity(newArrow);
-                                }
-                            }
-                            if (newArrow != null) {
-                                mergedCell.add(newArrow);
-                            }
-                        }
+                if(topArrow.start.intersects(bottomArrow.end)) {
+                   //merge arrows
+                    Interval middle = topArrow.start.intersection(bottomArrow.end);
+                    Arrow newArrow = new Arrow();
+                    if (middle != null) {
+                        //if they connect, we copy the two arrows, modify their connection,
+                        //create a new arrow with the constituents as subarrows, and add that to the mergedcell
+                        //after the mergedcell is created, we can delete the base arrows
+                        Arrow topCopy = new Arrow(topArrow);
+                        topCopy.start = middle;
+                        Arrow bottomCopy = new Arrow(bottomArrow);
+                        bottomCopy.end = middle;
+
+                        newArrow.subArrows.add(topCopy);
+                        newArrow.subArrows.add(bottomCopy);
+                        newArrow.start = bottomCopy.start;
+                        newArrow.end = topCopy.end;
+
+                        //if end and middle are parallel, we need to project monotonicity
+                        //monotonicity is already enforced within a single cell
+                        //and enforcemonotonicity knows whether or not start and end are parallel
+                        enforceMonotonicity(newArrow);
+                    }
+                    //enforceMonotonicity could null out the new arrow
+                    if (newArrow != null && !newArrow.isNull()) {
+                        mergedCell.add(newArrow);
                     }
                 }
             }
         }
+
+        //keep the originals in case they can connect later on
+        //(hashset doesn't allow duplicates, so no need to worry here)
+        mergedCell.addAll(topCell);
+        mergedCell.addAll(bottomCell);
 
         //remove constituent cells and add new one
         column.remove(topCell);
@@ -351,16 +356,16 @@ public class ReachabilityStructure {
                             Interval middle = leftArrow.start.intersection(rightArrow.end);
                             Arrow newArrow = new Arrow();
                             if (middle != null) {
-                                leftArrow.setStart(middle);
-                                rightArrow.setEnd(middle);
+                                leftArrow.start = middle;
+                                rightArrow.end = middle;
                                 enforceMonotonicity(leftArrow); //TODO: do we need these since enforce is recursive?
                                 enforceMonotonicity(rightArrow);
                                 if (leftArrow != null && rightArrow != null) {
                                     newArrow.subArrows = new ArrayList<Arrow>();
                                     newArrow.subArrows.add(leftArrow);
                                     newArrow.subArrows.add(rightArrow);
-                                    newArrow.setStart(rightArrow.start);
-                                    newArrow.setEnd(leftArrow.end);
+                                    newArrow.start = rightArrow.start;
+                                    newArrow.end = leftArrow.end;
                                     enforceMonotonicity(newArrow);
                                 }
                             } else {

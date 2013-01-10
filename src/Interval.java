@@ -126,11 +126,17 @@ public class Interval {
 
     public Interval intersection(Interval other) {
         if (this.intersects(other)) {
+            Interval result;
             if (this.isVertical()) {
-                return new Interval(new Point2D.Double(this.startGraph.x, Math.max(this.startGraph.y, other.startGraph.y)), new Point2D.Double(this.startGraph.x, Math.min(this.endGraph.y, other.endGraph.y)));
+                result = new Interval(new Point2D.Double(this.startGraph.x, Math.max(this.startGraph.y, other.startGraph.y)), new Point2D.Double(this.startGraph.x, Math.min(this.endGraph.y, other.endGraph.y)));
+
             } else {
-                return new Interval(new Point2D.Double(Math.max(this.startGraph.x, other.startGraph.x), this.startGraph.y), new Point2D.Double(Math.min(this.endGraph.x, other.endGraph.x), this.startGraph.y));
+                result = new Interval(new Point2D.Double(Math.max(this.startGraph.x, other.startGraph.x), this.startGraph.y), new Point2D.Double(Math.min(this.endGraph.x, other.endGraph.x), this.startGraph.y));
             }
+            if (result.startGraph.equals(result.endGraph)) {
+                result = null;
+            }
+            return result;
         } else {
             return null;
         }
