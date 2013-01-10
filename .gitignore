@@ -4,3 +4,10 @@
 *.jar
 *.war
 *.ear
+
+# Mac Files #
+.DS_Store
+
+# IdeaJ Files #
+.idea/workspace.xml 
+.idea/tasks.xml
