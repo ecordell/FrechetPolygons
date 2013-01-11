@@ -48,15 +48,27 @@ public class ReachabilityStructure {
     public Point2D.Double[] getFirstReachablePath() {
         for (ArrayList<Set<Arrow>> column : layers.get(0).arrows) {
             for (Arrow arrow : column.get(0)) {
-                if (!arrow.start.isVertical()) {
-                    Arrow topArrow = reachabilityStructureFromPoint(arrow.start.getMidpoint());
-                    Point2D.Double[] path = pathFromArrow(topArrow);
-                    if (path != null) {
-                        return path;
+                if (!arrow.start.isVertical() && arrow.start.startGraph.y == 0) {
+                    Point2D.Double testPoint = arrow.start.getMidpoint();
+                    Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length);
+                    Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
+                    for (Arrow possible : reachable) {
+                        if (possible.start.contains(testPoint) && possible.end.contains(endPoint)) {
+                            Point2D.Double[] path = pathFromArrow(possible);
+                            if (path != null) {
+                                Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
+                                finalPath[0] = testPoint;
+                                System.arraycopy(path, 0, finalPath, 1, path.length);
+                                finalPath[finalPath.length - 1] = endPoint;
+                                return finalPath;
+                            }
+                         }
                     }
                 }
             }
         }
+
+
         return null;
     }
 
@@ -65,12 +77,30 @@ public class ReachabilityStructure {
         Set<Point2D.Double> intervalSet = new HashSet<Point2D.Double>();
 
         for (Arrow a : arrowSet) {
-            intervalSet.add(a.start.getMidpoint());
             intervalSet.add(a.end.getMidpoint());
         }
 
-        Point2D.Double[] result = (Point2D.Double[]) intervalSet.toArray();
-        Arrays.sort(result);
+        Point2D.Double[] result = new Point2D.Double[intervalSet.size()];
+        int i = 0;
+        for (Object point : intervalSet.toArray()) {
+            result[i++] = (Point2D.Double) point;
+        }
+
+        Arrays.sort(result, new Comparator<Point2D.Double>() {
+            public int compare(Point2D.Double p1, Point2D.Double p2) {
+                if (p1.getX() < p2.getX())
+                    return -1;
+                if (p1.getX() > p2.getX())
+                    return 1;
+                if (p1.getY() < p2.getY())
+                    return -1;
+                if (p1.getY() > p2.getY())
+                    return 1;
+                return 0;
+            }
+        });
+
+
         return result;
     }
 
@@ -115,7 +145,6 @@ public class ReachabilityStructure {
                         Arrow arrow = new Arrow();
                         arrow.start = new Interval(left);
                         arrow.end = new Interval(right);
-                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
@@ -123,7 +152,6 @@ public class ReachabilityStructure {
                         Arrow arrow = new Arrow();
                         arrow.start = new Interval(left);
                         arrow.end = new Interval(top);
-                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
@@ -133,7 +161,6 @@ public class ReachabilityStructure {
                         Arrow arrow = new Arrow();
                         arrow.start = new Interval(bottom);
                         arrow.end = new Interval(right);
-                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
@@ -141,7 +168,6 @@ public class ReachabilityStructure {
                         Arrow arrow = new Arrow();
                         arrow.start = new Interval(bottom);
                         arrow.end = new Interval(top);
-                        arrow.subArrows = null;
                         enforceMonotonicity(arrow);
                         arrowSet.add(arrow);
                     }
@@ -285,14 +311,25 @@ public class ReachabilityStructure {
 
         Set<Arrow> topCell = column.get(column.size() - 1);
         Set<Arrow> bottomCell = column.get(column.size() - 2);
+        Set<Arrow> mergedCell = mergeCells(topCell, bottomCell);
 
 
-        Set<Arrow> mergedCell = new HashSet<Arrow>();
+        //remove constituent cells and add new one
+        column.remove(topCell);
+        column.remove(bottomCell);
+        column.add(mergedCell);
+
+        //recursively merge
+        mergeCellsIntoColumn(column);
+    }
+
+    HashSet<Arrow> mergeCells(Set<Arrow> first, Set<Arrow> second) {
+        HashSet<Arrow> mergedCell = new HashSet<Arrow>();
         //loop through arrows in adjacent cells and find the ones that connect
-        for (Arrow topArrow : topCell) {
-            for (Arrow bottomArrow : bottomCell) {
+        for (Arrow topArrow : first) {
+            for (Arrow bottomArrow : second) {
                 if(topArrow.start.intersects(bottomArrow.end)) {
-                   //merge arrows
+                    //merge arrows
                     Interval middle = topArrow.start.intersection(bottomArrow.end);
                     Arrow newArrow = new Arrow();
                     if (middle != null) {
@@ -324,70 +361,21 @@ public class ReachabilityStructure {
 
         //keep the originals in case they can connect later on
         //(hashset doesn't allow duplicates, so no need to worry here)
-        mergedCell.addAll(topCell);
-        mergedCell.addAll(bottomCell);
+        mergedCell.addAll(first);
+        mergedCell.addAll(second);
 
-        //remove constituent cells and add new one
-        column.remove(topCell);
-        column.remove(bottomCell);
-        column.add(mergedCell);
-
-        //recursively merge
-        mergeCellsIntoColumn(column);
+        return mergedCell;
     }
 
     ArrayList<Set<Arrow>> mergeTwoColumns(ArrayList<Set<Arrow>> left, ArrayList<Set<Arrow>> right) {
-
         //columns should only have one cell in them at this point, but many arrows
         Set<Arrow> leftColumn = left.get(0);
         Set<Arrow> rightColumn = right.get(0);
+        Set<Arrow> mergedColumn = mergeCells(rightColumn, leftColumn);
 
-
-        Set<Arrow> mergedColumn = new HashSet<Arrow>();
-        //loop through arrows in adjacent columns and find the ones that connect
-        for (Arrow leftArrow : leftColumn) {
-            for (Arrow rightArrow : rightColumn) {
-                if (leftArrow != null && rightArrow != null) {
-                    if(leftArrow.start.intersects(rightArrow.end)) {
-                        //merge arrows
-                        if(leftArrow.end.isParallelTo(rightArrow.start)) {
-                            //if end and middle are parallel, we need to project monotonicity
-                            //monotonicity is already enforced within a single cell
-                            Interval middle = leftArrow.start.intersection(rightArrow.end);
-                            Arrow newArrow = new Arrow();
-                            if (middle != null) {
-                                leftArrow.start = middle;
-                                rightArrow.end = middle;
-                                enforceMonotonicity(leftArrow); //TODO: do we need these since enforce is recursive?
-                                enforceMonotonicity(rightArrow);
-                                if (leftArrow != null && rightArrow != null) {
-                                    newArrow.subArrows = new ArrayList<Arrow>();
-                                    newArrow.subArrows.add(leftArrow);
-                                    newArrow.subArrows.add(rightArrow);
-                                    newArrow.start = rightArrow.start;
-                                    newArrow.end = leftArrow.end;
-                                    enforceMonotonicity(newArrow);
-                                }
-                            } else {
-                                leftArrow = null;
-                                rightArrow = null;
-                            }
-                            if (newArrow != null) {
-                                mergedColumn.add(newArrow);
-                            }
-
-                        }
-                    } else {
-                        //null it out
-                        // (this works because each arrow on level zero gets its own copy of the original interval, no stepping on other arrow's toes)
-                        //but if this causes problems just removing it should be fine, the garbage collector should take care of them
-                        leftArrow = null;
-                        rightArrow = null;
-                    }
-                }
-            }
-        }
-        return new ArrayList(mergedColumn);
+        ArrayList<Set<Arrow>> result = new ArrayList<Set<Arrow>>();
+        result.add(mergedColumn);
+        return result;
     }
 
     DiagonalTree diagonalTreeForPoint(Point2D.Double startPoint) {
@@ -463,6 +451,9 @@ public class ReachabilityStructure {
 
                     Diagonal newDiagonal = new Diagonal(indices[0], indices[1]);
 
+                    //diagonal represents an actual diagonal, not just for the sake of merging
+                    newDiagonal.isTrueDiagonal = true;
+
                     if(diagonals.indexOf(newDiagonal) == -1) {
                         diagonals.add(newDiagonal);
                     }
@@ -495,13 +486,16 @@ public class ReachabilityStructure {
         return diagonals;
     }
 
-    Arrow reachabilityStructureFromPoint(Point2D.Double startPoint) {
+    Set<Arrow> reachabilityStructureFromPoint(Point2D.Double startPoint) {
+        if (Math.floor(startPoint.x) > originalPolyP.length) {
+            return null;
+        }
         DiagonalTree diagonalTree = diagonalTreeForPoint(startPoint);
         this.layers.add(1, new Layer(layers.get(0)));
 
         //TODO: rework the layers idea. don't really need them now, just need one base layer and create a new top layer for each query
         if (diagonalTree != null) {
-            return (Arrow) mergeChildren(diagonalTree.root()).get(0).toArray()[0];
+            return mergeChildren(diagonalTree.root()).get(0);
         } else {
             return null;
         }
@@ -537,6 +531,10 @@ public class ReachabilityStructure {
     }
 
     ArrayList<Set<Arrow>> pruneInvalidIntervalsFromColumn(ArrayList<Set<Arrow>> column, Diagonal diagonal) {
+        if (!diagonal.isTrueDiagonal) {
+            //don't prune unless the diagonal being inspected is really a diagonal from the polygon
+            return column;
+        }
         ArrayList<Set<Arrow>> columnCopy = new ArrayList<Set<Arrow>>(column);
 
         for (Arrow arrow : columnCopy.get(0)) {

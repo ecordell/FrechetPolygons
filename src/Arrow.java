@@ -1,3 +1,4 @@
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 //TODO: check for null for all arguments of constructors before setting
@@ -17,7 +18,11 @@ public class Arrow {
         this.start = new Interval(other.start);
         this.end = new Interval(other.end);
         if (other.subArrows != null) {
-            this.subArrows = new ArrayList<Arrow>(other.subArrows);
+            this.subArrows = new ArrayList<Arrow>();
+            //deep copy
+            for (Arrow sub : other.subArrows) {
+                this.subArrows.add(new Arrow(sub));
+            }
         } else {
             this.subArrows = new ArrayList<Arrow>();
         }
@@ -47,26 +52,24 @@ public class Arrow {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Arrow other = (Arrow) obj;
-        if (!this.start.equals(other.start) || !this.end.equals(other.end) || !this.subArrows.equals(other.subArrows)) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Arrow arrow = (Arrow) o;
+
+        if (end != null ? !end.equals(arrow.end) : arrow.end != null) return false;
+        if (start != null ? !start.equals(arrow.start) : arrow.start != null) return false;
+        if (subArrows != null ? !subArrows.equals(arrow.subArrows) : arrow.subArrows != null) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + this.start.hashCode();
-        hash = 53 * hash + this.end.hashCode();
-        return hash;
+        int result = subArrows != null ? subArrows.hashCode() : 0;
+        result = 31 * result + (start != null ? start.hashCode() : 0);
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        return result;
     }
-
 }

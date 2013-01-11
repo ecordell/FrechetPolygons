@@ -1,6 +1,7 @@
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class IntervalTest {
@@ -86,5 +87,14 @@ public class IntervalTest {
         Interval shouldBeHorizontal = new Interval(new Point2D.Double(0, 0), new Point2D.Double(1, 0));
         Assert.assertTrue(shouldBeVertical.isVertical());
         Assert.assertFalse(shouldBeHorizontal.isVertical());
+    }
+
+    @Test
+    public void testGetMidpoint() throws Exception {
+        Interval horizontal = new Interval(new Point2D.Double(0, 0), new Point2D.Double(1, 0));
+        Assert.assertEquals(new Point2D.Double(0.5, 0), horizontal.getMidpoint());
+
+        Interval vertical = new Interval(new Point2D.Double(0, 0), new Point2D.Double(0, 1));
+        Assert.assertEquals(new Point2D.Double(0, 0.5), vertical.getMidpoint());
     }
 }

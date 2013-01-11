@@ -90,27 +90,23 @@ public class Interval {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Interval other = (Interval) obj;
-        if (this.startGraph.x != other.startGraph.x || this.startGraph.y != other.startGraph.y ||
-                this.endGraph.x != other.endGraph.x || this.endGraph.y != other.endGraph.y) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Interval interval = (Interval) o;
+
+        if (endGraph != null ? !endGraph.equals(interval.endGraph) : interval.endGraph != null) return false;
+        if (startGraph != null ? !startGraph.equals(interval.startGraph) : interval.startGraph != null) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + this.startGraph.hashCode();
-        hash = 53 * hash + this.endGraph.hashCode();
-        return hash;
+        int result = startGraph != null ? startGraph.hashCode() : 0;
+        result = 31 * result + (endGraph != null ? endGraph.hashCode() : 0);
+        return result;
     }
 
     public boolean intersects(Interval other) {

@@ -3,23 +3,26 @@
   <component name="ChangeListManager">
     <list default="true" id="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Arrow.java" afterPath="$PROJECT_DIR$/src/Arrow.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Diagonal.java" afterPath="$PROJECT_DIR$/src/Diagonal.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Interval.java" afterPath="$PROJECT_DIR$/src/Interval.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/IntervalTest.java" afterPath="$PROJECT_DIR$/src/IntervalTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/PolygonInputFrame.java" afterPath="$PROJECT_DIR$/src/PolygonInputFrame.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ReachabilityStructure.java" afterPath="$PROJECT_DIR$/src/ReachabilityStructure.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FrechetPolygon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357756478115" ignored="false" />
-    <file path="/fragment.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357767330785" ignored="false" />
+    <file path="/Dummy.txt" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357858734316" ignored="false" />
+    <file path="/fragment.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357868097399" ignored="false" />
     <file path="/BaseReachabilityGraph.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357494398820" ignored="false" />
-    <file path="/ReachabilityStructure.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357847683001" ignored="false" />
+    <file path="/ReachabilityStructure.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357867211932" ignored="false" />
     <file path="/PolygonInputFrame.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357691791260" ignored="false" />
     <file path="/FrechetPolygonalLine.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357678445473" ignored="false" />
     <file path="/Interval.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357844746637" ignored="false" />
-    <file path="/Arrow.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357847904124" ignored="false" />
+    <file path="/Arrow.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357868057572" ignored="false" />
     <file path="/Layer.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357754766067" ignored="false" />
-    <file path="/Diagonal.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357754833989" ignored="false" />
-    <file path="/IntervalTest.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357767048464" ignored="false" />
+    <file path="/Diagonal.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357856207481" ignored="false" />
+    <file path="/IntervalTest.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357858623793" ignored="false" />
     <file path="/DiagonalTreeTest.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357767722587" ignored="false" />
     <file path="/DiagonalTree.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357771045216" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -72,7 +75,21 @@
       </breakpoint>
     </breakpoint_any>
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="341" class="ReachabilityStructure" package="">
+      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="332" class="ReachabilityStructure" package="">
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="bottomArrow.start.equals(new Interval(new Point2D.Double(0, 0), new Point2D.Double(1, 0))) &amp;&amp;         topArrow.end.equals(new Interval(new Point2D.Double(0, 2), new Point2D.Double(1, 2))) &#13;java.awt.geom.Point2D&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="83" class="ReachabilityStructure" package="">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -86,8 +103,8 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="530" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
+      <breakpoint url="file://$PROJECT_DIR$/src/Arrow.java" line="19" class="Arrow" package="">
+        <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
@@ -97,64 +114,8 @@
         <option name="CONDITION_ENABLED" value="true" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="498" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="63" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="50" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="49" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
+        <option name="CONDITION" value="this.start.equals(new Interval(new Point2D.Double(0, 0), new Point2D.Double(1, 0))) &amp;&amp;   this.end.equals(new Interval(new Point2D.Double(0, 2), new Point2D.Double(1, 2))) &#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
     </line_breakpoints>
     <breakpoint_rules />
@@ -171,23 +132,25 @@
       <file leaf-file-name="ReachabilityStructure.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ReachabilityStructure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="282" column="0" selection-start="11307" selection-end="11307" vertical-scroll-proportion="-0.0089552235">
+            <state line="254" column="135" selection-start="10099" selection-end="10099" vertical-scroll-proportion="0.26567164">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2263#2279#0" expanded="true" />
-                <element signature="e#2724#2731#0" expanded="true" />
-                <element signature="e#2940#2947#0" expanded="true" />
-                <element signature="e#3451#3463#0" expanded="true" />
-                <element signature="e#4483#4490#0" expanded="true" />
-                <element signature="e#11506#11513#0" expanded="true" />
-                <element signature="e#14066#14073#0" expanded="true" />
-                <element signature="e#17216#17226#0" expanded="true" />
-                <element signature="e#18235#18245#0" expanded="true" />
-                <element signature="e#18352#18366#0" expanded="true" />
-                <element signature="e#20446#20787#0" expanded="true" />
-                <element signature="e#20776#20777#0" expanded="true" />
-                <element signature="e#21685#21708#0" expanded="true" />
-                <element signature="e#22643#22655#0" expanded="true" />
+                <element signature="e#3050#3066#0" expanded="true" />
+                <element signature="e#3402#3851#0" expanded="true" />
+                <element signature="e#3840#3841#0" expanded="true" />
+                <element signature="e#4043#4050#0" expanded="true" />
+                <element signature="e#4259#4266#0" expanded="true" />
+                <element signature="e#4770#4782#0" expanded="true" />
+                <element signature="e#5802#5809#0" expanded="true" />
+                <element signature="e#12995#13002#0" expanded="true" />
+                <element signature="e#15430#15442#0" expanded="true" />
+                <element signature="e#16121#16131#0" expanded="true" />
+                <element signature="e#17140#17150#0" expanded="true" />
+                <element signature="e#17257#17271#0" expanded="true" />
+                <element signature="e#19502#19843#0" expanded="true" />
+                <element signature="e#19832#19833#0" expanded="true" />
+                <element signature="e#20823#20846#0" expanded="true" />
+                <element signature="e#21958#21970#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -196,35 +159,10 @@
       <file leaf-file-name="Arrow.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Arrow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="14" selection-start="1830" selection-end="1830" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ArrayList.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/ArrayList.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="0" selection-start="2297" selection-end="2297" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Interval.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Interval.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="91" column="4" selection-start="3173" selection-end="3867" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DiagonalTree.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DiagonalTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="41" column="133" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -241,7 +179,7 @@
       <file leaf-file-name="IntervalTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/IntervalTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="30" vertical-scroll-proportion="0.0">
+            <state line="96" column="90" selection-start="4804" selection-end="4804" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -249,10 +187,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Interval.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Interval.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="70" column="9" selection-start="2509" selection-end="2509" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="PolygonInputFrame.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PolygonInputFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="54" selection-start="1655" selection-end="1655" vertical-scroll-proportion="0.0">
+            <state line="52" column="80" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -280,21 +227,21 @@
         <option value="$PROJECT_DIR$/src/FrechetPolygonalLine.java" />
         <option value="$PROJECT_DIR$/src/ShortestPath.java" />
         <option value="$PROJECT_DIR$/src/Layer.java" />
-        <option value="$PROJECT_DIR$/src/Diagonal.java" />
         <option value="$PROJECT_DIR$/tests/IntervalTest.java" />
-        <option value="$PROJECT_DIR$/src/IntervalTest.java" />
         <option value="$PROJECT_DIR$/src/DiagonalTreeTest.java" />
         <option value="$PROJECT_DIR$/src/DiagonalTree.java" />
-        <option value="$PROJECT_DIR$/src/PolygonInputFrame.java" />
+        <option value="$PROJECT_DIR$/src/Diagonal.java" />
         <option value="$PROJECT_DIR$/src/Interval.java" />
+        <option value="$PROJECT_DIR$/src/IntervalTest.java" />
         <option value="$PROJECT_DIR$/src/ReachabilityStructure.java" />
         <option value="$PROJECT_DIR$/src/Arrow.java" />
+        <option value="$PROJECT_DIR$/src/PolygonInputFrame.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="510" />
-    <option name="y" value="52" />
+    <option name="x" value="773" />
+    <option name="y" value="66" />
     <option name="width" value="1690" />
     <option name="height" value="1239" />
   </component>
@@ -402,6 +349,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="OverrideImplement.combined" value="false" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
@@ -655,7 +603,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="510" y="52" width="1690" height="1239" extended-state="0" />
+    <frame x="773" y="66" width="1690" height="1239" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.4975669" order="7" side_tool="false" content_ui="tabs" />
@@ -663,17 +611,17 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.4975669" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3941019" sideWeight="0.9428224" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3422699" sideWeight="0.24878345" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3941019" sideWeight="0.8832117" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3422699" sideWeight="0.31812653" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.4975669" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.4160584" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32886505" sideWeight="0.4975669" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.39963505" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32886505" sideWeight="0.49513382" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20255475" sideWeight="0.6577301" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3422699" sideWeight="0.7469586" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3422699" sideWeight="0.6776156" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -745,20 +693,22 @@
         <state line="59" column="13" selection-start="1692" selection-end="1692" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2263#2279#0" expanded="true" />
-            <element signature="e#2724#2731#0" expanded="true" />
-            <element signature="e#2940#2947#0" expanded="true" />
-            <element signature="e#3451#3463#0" expanded="true" />
-            <element signature="e#4483#4490#0" expanded="true" />
-            <element signature="e#11506#11513#0" expanded="true" />
-            <element signature="e#14066#14073#0" expanded="true" />
-            <element signature="e#17216#17226#0" expanded="true" />
-            <element signature="e#18235#18245#0" expanded="true" />
-            <element signature="e#18352#18366#0" expanded="true" />
-            <element signature="e#20446#20787#0" expanded="true" />
-            <element signature="e#20776#20777#0" expanded="true" />
-            <element signature="e#21685#21708#0" expanded="true" />
-            <element signature="e#22643#22655#0" expanded="true" />
+            <element signature="e#3050#3066#0" expanded="true" />
+            <element signature="e#3402#3851#0" expanded="true" />
+            <element signature="e#3840#3841#0" expanded="true" />
+            <element signature="e#4043#4050#0" expanded="true" />
+            <element signature="e#4259#4266#0" expanded="true" />
+            <element signature="e#4770#4782#0" expanded="true" />
+            <element signature="e#5802#5809#0" expanded="true" />
+            <element signature="e#12995#13002#0" expanded="true" />
+            <element signature="e#15430#15442#0" expanded="true" />
+            <element signature="e#16121#16131#0" expanded="true" />
+            <element signature="e#17140#17150#0" expanded="true" />
+            <element signature="e#17257#17271#0" expanded="true" />
+            <element signature="e#19502#19843#0" expanded="true" />
+            <element signature="e#19832#19833#0" expanded="true" />
+            <element signature="e#20823#20846#0" expanded="true" />
+            <element signature="e#21958#21970#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -768,20 +718,22 @@
         <state line="36" column="13" selection-start="821" selection-end="821" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2263#2279#0" expanded="true" />
-            <element signature="e#2724#2731#0" expanded="true" />
-            <element signature="e#2940#2947#0" expanded="true" />
-            <element signature="e#3451#3463#0" expanded="true" />
-            <element signature="e#4483#4490#0" expanded="true" />
-            <element signature="e#11506#11513#0" expanded="true" />
-            <element signature="e#14066#14073#0" expanded="true" />
-            <element signature="e#17216#17226#0" expanded="true" />
-            <element signature="e#18235#18245#0" expanded="true" />
-            <element signature="e#18352#18366#0" expanded="true" />
-            <element signature="e#20446#20787#0" expanded="true" />
-            <element signature="e#20776#20777#0" expanded="true" />
-            <element signature="e#21685#21708#0" expanded="true" />
-            <element signature="e#22643#22655#0" expanded="true" />
+            <element signature="e#3050#3066#0" expanded="true" />
+            <element signature="e#3402#3851#0" expanded="true" />
+            <element signature="e#3840#3841#0" expanded="true" />
+            <element signature="e#4043#4050#0" expanded="true" />
+            <element signature="e#4259#4266#0" expanded="true" />
+            <element signature="e#4770#4782#0" expanded="true" />
+            <element signature="e#5802#5809#0" expanded="true" />
+            <element signature="e#12995#13002#0" expanded="true" />
+            <element signature="e#15430#15442#0" expanded="true" />
+            <element signature="e#16121#16131#0" expanded="true" />
+            <element signature="e#17140#17150#0" expanded="true" />
+            <element signature="e#17257#17271#0" expanded="true" />
+            <element signature="e#19502#19843#0" expanded="true" />
+            <element signature="e#19832#19833#0" expanded="true" />
+            <element signature="e#20823#20846#0" expanded="true" />
+            <element signature="e#21958#21970#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -802,25 +754,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Diagonal.java">
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/ArrayList.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="0.0">
+        <state line="64" column="0" selection-start="2297" selection-end="2297" vertical-scroll-proportion="0.87288135">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/IntervalTest.java">
+    <entry file="file://$PROJECT_DIR$/src/Diagonal.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="30" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="12" column="37" selection-start="290" selection-end="290" vertical-scroll-proportion="0.2542373">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DiagonalTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="13" column="0" selection-start="312" selection-end="312" vertical-scroll-proportion="0.27542374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/Arrays.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="329" column="0" selection-start="14545" selection-end="14545" vertical-scroll-proportion="0.87288135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Interval.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="9" selection-start="2509" selection-end="2509" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -832,53 +796,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/PolygonInputFrame.java">
+    <entry file="file://$PROJECT_DIR$/src/IntervalTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="54" selection-start="1655" selection-end="1655" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="96" column="90" selection-start="4804" selection-end="4804" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/ArrayList.class">
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/lang/Object.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="0" selection-start="2297" selection-end="2297" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Interval.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="4" selection-start="3173" selection-end="3867" vertical-scroll-proportion="0.0">
+        <state line="17" column="38" selection-start="457" selection-end="457" vertical-scroll-proportion="0.33240998">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Arrow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="14" selection-start="1830" selection-end="1830" vertical-scroll-proportion="0.0">
+        <state line="41" column="133" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PolygonInputFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="80" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ReachabilityStructure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="282" column="0" selection-start="11307" selection-end="11307" vertical-scroll-proportion="-0.0089552235">
+        <state line="254" column="135" selection-start="10099" selection-end="10099" vertical-scroll-proportion="0.26567164">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2263#2279#0" expanded="true" />
-            <element signature="e#2724#2731#0" expanded="true" />
-            <element signature="e#2940#2947#0" expanded="true" />
-            <element signature="e#3451#3463#0" expanded="true" />
-            <element signature="e#4483#4490#0" expanded="true" />
-            <element signature="e#11506#11513#0" expanded="true" />
-            <element signature="e#14066#14073#0" expanded="true" />
-            <element signature="e#17216#17226#0" expanded="true" />
-            <element signature="e#18235#18245#0" expanded="true" />
-            <element signature="e#18352#18366#0" expanded="true" />
-            <element signature="e#20446#20787#0" expanded="true" />
-            <element signature="e#20776#20777#0" expanded="true" />
-            <element signature="e#21685#21708#0" expanded="true" />
-            <element signature="e#22643#22655#0" expanded="true" />
+            <element signature="e#3050#3066#0" expanded="true" />
+            <element signature="e#3402#3851#0" expanded="true" />
+            <element signature="e#3840#3841#0" expanded="true" />
+            <element signature="e#4043#4050#0" expanded="true" />
+            <element signature="e#4259#4266#0" expanded="true" />
+            <element signature="e#4770#4782#0" expanded="true" />
+            <element signature="e#5802#5809#0" expanded="true" />
+            <element signature="e#12995#13002#0" expanded="true" />
+            <element signature="e#15430#15442#0" expanded="true" />
+            <element signature="e#16121#16131#0" expanded="true" />
+            <element signature="e#17140#17150#0" expanded="true" />
+            <element signature="e#17257#17271#0" expanded="true" />
+            <element signature="e#19502#19843#0" expanded="true" />
+            <element signature="e#19832#19833#0" expanded="true" />
+            <element signature="e#20823#20846#0" expanded="true" />
+            <element signature="e#21958#21970#0" expanded="true" />
           </folding>
         </state>
       </provider>
