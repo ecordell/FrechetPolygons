@@ -31,8 +31,8 @@ public class Interval {
         } else {
             start = startGraph.x;
         }
-        int segmentStartIndex = (int) Math.floor(start);
-        if (segmentStartIndex < 0 || segmentStartIndex >= poly.length - 1)    {
+        int segmentStartIndex = (int) Math.floor(start % poly.length);
+        if (segmentStartIndex < 0)    {
             System.out.println("Error converting graph point to polygon point.");
             return null;
         }
@@ -51,8 +51,8 @@ public class Interval {
         } else {
             end = endGraph.x;
         }
-        int segmentEndIndex = (int) Math.floor(end);
-        if (segmentEndIndex < 1 || segmentEndIndex >= poly.length)    {
+        int segmentEndIndex = (int) Math.ceil(end % poly.length);
+        if (segmentEndIndex < 1)    {
             System.out.println("Error converting graph point to polygon point.");
             return null;
         }

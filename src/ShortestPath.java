@@ -42,7 +42,7 @@ public class ShortestPath {
 	public Point2D.Double[] getPath() {
 		//this.test();
 		this.shortestPath(_start.x, _start.y, _end.x, _end.y);
-		System.out.println(Arrays.toString(_path));
+		//System.out.println(Arrays.toString(_path));
 		return _path;
 	}
 
