@@ -38,6 +38,7 @@ public class Interval {
         }
         Point2D.Double segmentStart = poly[segmentStartIndex];
         Point2D.Double segmentEnd = poly[segmentStartIndex + 1];
+        start = start - Math.floor(start);
         double x = (1 - start)*segmentStart.x + start*segmentEnd.x;
         double y = (1 - start)*segmentStart.y + start*segmentEnd.y;
         return new Point2D.Double(x, y);
@@ -57,6 +58,7 @@ public class Interval {
         }
         Point2D.Double segmentStart = poly[segmentEndIndex - 1];
         Point2D.Double segmentEnd = poly[segmentEndIndex];
+        end = end - Math.floor(end);
         double x = (1 - end)*segmentStart.x + end*segmentEnd.x;
         double y = (1 - end)*segmentStart.y + end*segmentEnd.y;
         return new Point2D.Double(x, y);

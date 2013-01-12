@@ -565,7 +565,7 @@ public class ReachabilityStructure {
                 Point2D.Double endPoint = arrow.end.getPolygonMidpoint(borderPolyQ);
                 ShortestPath spCalculator = new ShortestPath(insertPointIntoPolygon(insertPointIntoPolygon(originalPolyQ, startPoint), endPoint), startPoint, endPoint);
                 //TODO: can this fail for midpoints but not for other points in the interval?
-                if (spCalculator.getPath() != null) {
+                if (spCalculator.getPath() != null && !startPoint.equals(endPoint)) {
                     //get diagonal path
                     Point2D.Double[] diagonalPath = {borderPolyP[diagonal.startIndex], borderPolyP[diagonal.endIndex]};
                     //get shortest path
@@ -585,6 +585,7 @@ public class ReachabilityStructure {
                         if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, 1))) {
                               //exists a path from start to end
                               isPath = true;
+                              break;
                         }
                     }
                     if (!isPath) {
