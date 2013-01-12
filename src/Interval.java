@@ -15,8 +15,13 @@ public class Interval {
     }
 
     public Interval(Interval another) {
-        this.startGraph = new Point2D.Double(another.startGraph.x, another.startGraph.y);
-        this.endGraph = new Point2D.Double(another.endGraph.x, another.endGraph.y);
+        if (another.startGraph.equals(another.endGraph)) {
+            this.startGraph = null;
+            this.endGraph = null;
+        } else {
+            this.startGraph = new Point2D.Double(another.startGraph.x, another.startGraph.y);
+            this.endGraph = new Point2D.Double(another.endGraph.x, another.endGraph.y);
+        }
     }
 
     public Interval(Point2D.Double start, Point2D.Double end) {
@@ -31,13 +36,13 @@ public class Interval {
         } else {
             start = startGraph.x;
         }
-        int segmentStartIndex = (int) Math.floor(start % poly.length);
+        int segmentStartIndex = (int) Math.floor(start);
         if (segmentStartIndex < 0)    {
             System.out.println("Error converting graph point to polygon point.");
             return null;
         }
         Point2D.Double segmentStart = poly[segmentStartIndex];
-        Point2D.Double segmentEnd = poly[segmentStartIndex + 1];
+        Point2D.Double segmentEnd = poly[(segmentStartIndex + 1) % poly.length];
         start = start - Math.floor(start);
         double x = (1 - start)*segmentStart.x + start*segmentEnd.x;
         double y = (1 - start)*segmentStart.y + start*segmentEnd.y;
@@ -51,11 +56,12 @@ public class Interval {
         } else {
             end = endGraph.x;
         }
-        int segmentEndIndex = (int) Math.ceil(end % poly.length);
-        if (segmentEndIndex < 1)    {
+        int segmentEndIndex = (int) Math.ceil(end);
+        if (segmentEndIndex < 0)    {
             System.out.println("Error converting graph point to polygon point.");
             return null;
         }
+
         Point2D.Double segmentStart = poly[segmentEndIndex - 1];
         Point2D.Double segmentEnd = poly[segmentEndIndex];
         end = end - Math.floor(end);

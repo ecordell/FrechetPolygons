@@ -40,7 +40,7 @@ public class Arrow {
     }
 
     public boolean isNull() {
-        if (this.start.startGraph == null || this.start.endGraph == null || this.end.startGraph == null || this.end.endGraph == null) {
+        if (this.start == null || this.end == null || this.start.startGraph == null || this.start.endGraph == null || this.end.startGraph == null || this.end.endGraph == null) {
             return true;
         }
         return false;

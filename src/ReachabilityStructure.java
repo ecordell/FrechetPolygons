@@ -1,3 +1,4 @@
+
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.Polygon;
 import org.poly2tri.geometry.polygon.PolygonPoint;
@@ -33,7 +34,7 @@ public class ReachabilityStructure {
         _epsilon = epsilon;
 
 		Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, epsilon);
-		int ctr = 0;
+		/*int ctr = 0;
 		for (int i = 0; i < borderPolyP.length - 1; i++) {
 				for (Arrow arrow : zeroLayer.arrows.get(i).get(0)) {
 					System.out.println(arrow.toString());
@@ -41,6 +42,7 @@ public class ReachabilityStructure {
 				}
 		}
 		System.out.println("Total number of intervals: " + ctr);
+		*/
 		layers = new ArrayList<Layer>();
         layers.add(zeroLayer);
     }
@@ -50,7 +52,7 @@ public class ReachabilityStructure {
             for (Arrow arrow : column.get(0)) {
                 if (!arrow.start.isVertical() && arrow.start.startGraph.y == 0) {
                     Point2D.Double testPoint = arrow.start.getMidpoint();
-                    Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length);
+                    Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length - 1);
                     Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
                     if (reachable != null) {
                         for (Arrow possible : reachable) {
@@ -287,11 +289,23 @@ public class ReachabilityStructure {
             if (arrow.start.isVertical()) {
                 if (arrow.start.startGraph.y >= arrow.start.endGraph.y ||
                         arrow.end.startGraph.y >= arrow.end.endGraph.y) {
+                    arrow.start.startGraph = null;
+                    arrow.start.endGraph = null;
+                    arrow.start = null;
+                    arrow.end.startGraph = null;
+                    arrow.end.endGraph = null;
+                    arrow.end = null;
                     arrow = null;
                 }
             } else {
                 if (arrow.start.startGraph.x >= arrow.start.endGraph.x ||
                         arrow.end.startGraph.x >= arrow.end.endGraph.x) {
+                    arrow.start.startGraph = null;
+                    arrow.start.endGraph = null;
+                    arrow.start = null;
+                    arrow.end.startGraph = null;
+                    arrow.end.endGraph = null;
+                    arrow.end = null;
                     arrow = null;
                 }
             }
@@ -483,7 +497,7 @@ public class ReachabilityStructure {
             }
         }
 
-        System.out.println("Number of diagonals: "  + diagonals.size());
+        //System.out.println("Number of diagonals: "  + diagonals.size());
 
         int max = diagonals.size();
         //since P is doubled, add other possible diagonal indices
@@ -527,13 +541,13 @@ public class ReachabilityStructure {
             ArrayList<ArrayList<Set<Arrow>>> columns = new ArrayList<ArrayList<Set<Arrow>>>();
             for (DiagonalTree.DiagonalNode child : node.children) {
                 if (child.hasChildren()) {
-                    System.out.println("Merge Children of:");
-                    child.print();
+                    //System.out.println("Merge Children of:");
+                    //child.print();
                     columns.add(pruneInvalidIntervalsFromColumn(mergeChildren(child), child.data));
 
                 } else {
-                    System.out.println("Return single ");
-                    child.print();
+                    //System.out.println("Return single ");
+                    //child.print();
                     columns.add(layers.get(1).arrows.get(child.data.startIndex));
                 }
             }
@@ -541,12 +555,12 @@ public class ReachabilityStructure {
     }
 
     ArrayList<Set<Arrow>> mergeColumns(ArrayList<ArrayList<Set<Arrow>>> columns) {
-        ArrayList<Set<Arrow>> finalColumn = columns.get(0);
+        ArrayList<Set<Arrow>> finalColumn = new ArrayList<Set<Arrow>>(columns.get(columns.size() - 1));
         if (columns.size() == 1) {
             return finalColumn;
         }
-        for (int i = 1; i < columns.size(); i++) {
-            finalColumn = mergeTwoColumns(finalColumn, columns.get(i));
+        for (int i = columns.size() - 2; i >= 0; i--) {
+            finalColumn = mergeTwoColumns(columns.get(i), finalColumn);
         }
 
         return finalColumn;
@@ -582,7 +596,7 @@ public class ReachabilityStructure {
 
                     boolean isPath = false;
                     for (Arrow a : finalArrows) {
-                        if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, 1))) {
+                        if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, shortestPath.length))) {
                               //exists a path from start to end
                               isPath = true;
                               break;
