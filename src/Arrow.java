@@ -17,14 +17,13 @@ public class Arrow {
     public Arrow(Arrow other) {
         this.start = new Interval(other.start);
         this.end = new Interval(other.end);
-        if (other.subArrows != null) {
-            this.subArrows = new ArrayList<Arrow>();
+        this.subArrows = new ArrayList<Arrow>();
+        if (other.subArrows != null && other.subArrows.size() > 0) {
+            //this.subArrows = new ArrayList<Arrow>(other.subArrows);
             //deep copy
             for (Arrow sub : other.subArrows) {
                 this.subArrows.add(new Arrow(sub));
             }
-        } else {
-            this.subArrows = new ArrayList<Arrow>();
         }
     }
 
@@ -41,7 +40,7 @@ public class Arrow {
     }
 
     public boolean isNull() {
-        if (this.start.startGraph == null || this.start.endGraph ==null || this.end.startGraph == null || this.end.endGraph == null) {
+        if (this.start.startGraph == null || this.start.endGraph == null || this.end.startGraph == null || this.end.endGraph == null) {
             return true;
         }
         return false;

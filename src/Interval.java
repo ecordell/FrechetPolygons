@@ -15,8 +15,8 @@ public class Interval {
     }
 
     public Interval(Interval another) {
-        this.startGraph = another.startGraph;
-        this.endGraph = another.endGraph;
+        this.startGraph = new Point2D.Double(another.startGraph.x, another.startGraph.y);
+        this.endGraph = new Point2D.Double(another.endGraph.x, another.endGraph.y);
     }
 
     public Interval(Point2D.Double start, Point2D.Double end) {

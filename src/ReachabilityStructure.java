@@ -52,17 +52,19 @@ public class ReachabilityStructure {
                     Point2D.Double testPoint = arrow.start.getMidpoint();
                     Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length);
                     Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
-                    for (Arrow possible : reachable) {
-                        if (possible.start.contains(testPoint) && possible.end.contains(endPoint)) {
-                            Point2D.Double[] path = pathFromArrow(possible);
-                            if (path != null) {
-                                Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
-                                finalPath[0] = testPoint;
-                                System.arraycopy(path, 0, finalPath, 1, path.length);
-                                finalPath[finalPath.length - 1] = endPoint;
-                                return finalPath;
-                            }
-                         }
+                    if (reachable != null) {
+                        for (Arrow possible : reachable) {
+                            if (possible.start.contains(testPoint) && possible.end.contains(endPoint)) {
+                                Point2D.Double[] path = pathFromArrow(possible);
+                                if (path != null) {
+                                    Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
+                                    finalPath[0] = testPoint;
+                                    System.arraycopy(path, 0, finalPath, 1, path.length);
+                                    finalPath[finalPath.length - 1] = endPoint;
+                                    return finalPath;
+                                }
+                             }
+                        }
                     }
                 }
             }
@@ -105,14 +107,13 @@ public class ReachabilityStructure {
     }
 
     Set<Arrow> allSubArrows(Arrow arrow) {
+        Set<Arrow> arrowSet = new HashSet<Arrow>();
         if (arrow.subArrows != null && arrow.subArrows.size() > 0) {
-            Set<Arrow> arrowSet = new HashSet<Arrow>();
             for (Arrow sub : arrow.subArrows) {
                 arrowSet.addAll(allSubArrows(sub));
             }
             return arrowSet;
         } else {
-            Set<Arrow> arrowSet = new HashSet<Arrow>();
             arrowSet.add(arrow);
             return arrowSet;
         }
@@ -331,20 +332,21 @@ public class ReachabilityStructure {
                 if(topArrow.start.intersects(bottomArrow.end)) {
                     //merge arrows
                     Interval middle = topArrow.start.intersection(bottomArrow.end);
-                    Arrow newArrow = new Arrow();
+                    Arrow newArrow = null;
                     if (middle != null) {
                         //if they connect, we copy the two arrows, modify their connection,
                         //create a new arrow with the constituents as subarrows, and add that to the mergedcell
                         //after the mergedcell is created, we can delete the base arrows
                         Arrow topCopy = new Arrow(topArrow);
-                        topCopy.start = middle;
+                        topCopy.start = new Interval(middle);
                         Arrow bottomCopy = new Arrow(bottomArrow);
-                        bottomCopy.end = middle;
+                        bottomCopy.end = new Interval(middle);
 
+                        newArrow = new Arrow();
                         newArrow.subArrows.add(topCopy);
                         newArrow.subArrows.add(bottomCopy);
-                        newArrow.start = bottomCopy.start;
-                        newArrow.end = topCopy.end;
+                        newArrow.start = new Interval(bottomCopy.start);
+                        newArrow.end = new Interval(topCopy.end);
 
                         //if end and middle are parallel, we need to project monotonicity
                         //monotonicity is already enforced within a single cell
@@ -361,17 +363,32 @@ public class ReachabilityStructure {
 
         //keep the originals in case they can connect later on
         //(hashset doesn't allow duplicates, so no need to worry here)
-        mergedCell.addAll(first);
-        mergedCell.addAll(second);
+        for (Arrow a : first) {
+            mergedCell.add(new Arrow(a));
+        }
+        for (Arrow a : second) {
+            mergedCell.add(new Arrow(a));
+        }
+        //mergedCell.addAll(new HashSet<Arrow>(first));
+        //mergedCell.addAll(new HashSet<Arrow>(second));
 
         return mergedCell;
     }
 
     ArrayList<Set<Arrow>> mergeTwoColumns(ArrayList<Set<Arrow>> left, ArrayList<Set<Arrow>> right) {
         //columns should only have one cell in them at this point, but many arrows
-        Set<Arrow> leftColumn = left.get(0);
-        Set<Arrow> rightColumn = right.get(0);
-        Set<Arrow> mergedColumn = mergeCells(rightColumn, leftColumn);
+        Set<Arrow> leftColumn = new HashSet<Arrow>();
+        for (Arrow a : left.get(0)) {
+            leftColumn.add(new Arrow(a));
+        }
+        Set<Arrow> rightColumn = new HashSet<Arrow>();
+        for (Arrow a : right.get(0)) {
+            rightColumn.add(new Arrow(a));
+        }
+        Set<Arrow> mergedColumn = new HashSet<Arrow>();
+        for (Arrow a : mergeCells(rightColumn, leftColumn)) {
+            mergedColumn.add(new Arrow(a));
+        }
 
         ArrayList<Set<Arrow>> result = new ArrayList<Set<Arrow>>();
         result.add(mergedColumn);
@@ -379,8 +396,12 @@ public class ReachabilityStructure {
     }
 
     DiagonalTree diagonalTreeForPoint(Point2D.Double startPoint) {
-        ArrayList<Diagonal> diagonals = orderedDiagonalsForPolygon(originalPolyP);
         int startIndex =  (int) Math.floor(startPoint.x);
+        if (startIndex >= originalPolyP.length) {
+            return null;
+        }
+        ArrayList<Diagonal> diagonals = orderedDiagonalsForPolygon(originalPolyP);
+
         Set<Arrow> column = layers.get(0).arrows.get(startIndex).get(0);
         DiagonalTree diagonalTree;
 
@@ -502,27 +523,28 @@ public class ReachabilityStructure {
     }
 
     ArrayList<Set<Arrow>> mergeChildren(DiagonalTree.DiagonalNode node){
-        if (node.hasChildren()) {
-            for (DiagonalTree.DiagonalNode child : node.children) {
-                return mergeChildren(child);
-            }
-        } else {
             //get list of columns
             ArrayList<ArrayList<Set<Arrow>>> columns = new ArrayList<ArrayList<Set<Arrow>>>();
-            for (DiagonalTree.DiagonalNode child : node.parent.children) {
-                columns.add(layers.get(1).arrows.get(child.data.startIndex));
+            for (DiagonalTree.DiagonalNode child : node.children) {
+                if (child.hasChildren()) {
+                    System.out.println("Merge Children of:");
+                    child.print();
+                    columns.add(pruneInvalidIntervalsFromColumn(mergeChildren(child), child.data));
+
+                } else {
+                    System.out.println("Return single ");
+                    child.print();
+                    columns.add(layers.get(1).arrows.get(child.data.startIndex));
+                }
             }
-            if (node.parent.parent == null) { //root node, don't prune
-                return mergeColumns(columns);
-            } else {
-                return pruneInvalidIntervalsFromColumn(mergeColumns(columns), node.parent.data);
-            }
-        }
-        return null;
+            return mergeColumns(columns);
     }
 
     ArrayList<Set<Arrow>> mergeColumns(ArrayList<ArrayList<Set<Arrow>>> columns) {
         ArrayList<Set<Arrow>> finalColumn = columns.get(0);
+        if (columns.size() == 1) {
+            return finalColumn;
+        }
         for (int i = 1; i < columns.size(); i++) {
             finalColumn = mergeTwoColumns(finalColumn, columns.get(i));
         }
