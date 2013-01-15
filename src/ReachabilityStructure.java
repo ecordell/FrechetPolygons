@@ -55,10 +55,12 @@ public class ReachabilityStructure {
                     Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length - 1);
                     Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
                     if (reachable != null) {
+                        ArrayList<Arrow> possibles = new ArrayList<Arrow>();
                         for (Arrow possible : reachable) {
                             if (possible.start.contains(testPoint) && possible.end.contains(endPoint)) {
+                                 possibles.add(possible);
                                 Point2D.Double[] path = pathFromArrow(possible);
-                                if (path != null) {
+                                if (path != null && path.length == originalPolyP.length + originalPolyQ.length - 2) {
                                     Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
                                     finalPath[0] = testPoint;
                                     System.arraycopy(path, 0, finalPath, 1, path.length);
@@ -530,11 +532,26 @@ public class ReachabilityStructure {
 
         //TODO: rework the layers idea. don't really need them now, just need one base layer and create a new top layer for each query
         if (diagonalTree != null) {
-            return mergeChildren(diagonalTree.root()).get(0);
+            ArrayList<Set<Arrow>> merged = mergeChildren(diagonalTree.root());
+            return merged.get(0);
         } else {
             return null;
         }
     }
+
+    /*
+        if (diagonalTree != null) {
+            HashSet<Arrow> result = new HashSet<Arrow>();
+            layers.add(new Layer());
+            layers.get(2).arrows = new ArrayList<ArrayList<Set<Arrow>>>();
+            for (Arrow a : mergeChildren(diagonalTree.root()).get(0)) {
+                result.add(a);
+            }
+            return result;
+        } else {
+            return null;
+        }
+     */
 
     ArrayList<Set<Arrow>> mergeChildren(DiagonalTree.DiagonalNode node){
             //get list of columns
@@ -551,8 +568,11 @@ public class ReachabilityStructure {
                     columns.add(layers.get(1).arrows.get(child.data.startIndex));
                 }
             }
-            return mergeColumns(columns);
+            ArrayList<Set<Arrow>> merged = mergeColumns(columns);
+            return merged;
     }
+
+
 
     ArrayList<Set<Arrow>> mergeColumns(ArrayList<ArrayList<Set<Arrow>>> columns) {
         ArrayList<Set<Arrow>> finalColumn = new ArrayList<Set<Arrow>>(columns.get(columns.size() - 1));

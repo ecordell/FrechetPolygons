@@ -89,7 +89,7 @@ public class Interval {
             if (point.y >= startGraph.y && point.y <= endGraph.y) {
                 return true;
             }
-        } else {
+        } else if (point.y == startGraph.y && point.y == endGraph.y) {
             if (point.x >= startGraph.x && point.x <= endGraph.x) {
                 return true;
             }
@@ -118,7 +118,9 @@ public class Interval {
     }
 
     public boolean intersects(Interval other) {
-
+        if (other == null) {
+            return false;
+        }
         if (this.isVertical() && other.isVertical()) {
             return (this.startGraph.y <= other.endGraph.y) && (other.startGraph.y <= this.endGraph.y);
         } else if (!this.isVertical() && !other.isVertical()) {
