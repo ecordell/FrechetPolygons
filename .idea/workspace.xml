@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Interval.java" afterPath="$PROJECT_DIR$/src/Interval.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.classpath" afterPath="$PROJECT_DIR$/.classpath" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/PolygonInputFrame.java" afterPath="$PROJECT_DIR$/src/PolygonInputFrame.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ReachabilityStructure.java" afterPath="$PROJECT_DIR$/src/ReachabilityStructure.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FrechetPolygon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357858734316" ignored="false" />
+    <file path="/Dummy.txt" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1358547528618" ignored="false" />
     <file path="/fragment.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1358230257707" ignored="false" />
     <file path="/BaseReachabilityGraph.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357494398820" ignored="false" />
-    <file path="/ReachabilityStructure.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1358231993600" ignored="false" />
+    <file path="/ReachabilityStructure.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1358548727256" ignored="false" />
     <file path="/PolygonInputFrame.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357691791260" ignored="false" />
     <file path="/FrechetPolygonalLine.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1357678445473" ignored="false" />
     <file path="/Interval.java" changelist="fb701bc8-eb71-4db3-9dc8-6c9b2733c453" time="1358229606323" ignored="false" />
@@ -35,7 +36,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -70,8 +70,8 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="364" class="ReachabilityStructure" package="">
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="353" class="ReachabilityStructure" package="">
         <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -83,34 +83,6 @@
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
         <option name="CONDITION" value="bottomArrow.start.equals(new Interval(new Point2D.Double(0, 0), new Point2D.Double(1, 0))) &amp;&amp;         topArrow.end.equals(new Interval(new Point2D.Double(0, 2), new Point2D.Double(1, 2))) &#13;java.awt.geom.Point2D&#13;JAVA" />
-        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="399" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="false" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="&#13;&#13;JAVA" />
-        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="385" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="false" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="&#13;&#13;JAVA" />
         <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
       <breakpoint url="file://$PROJECT_DIR$/src/Interval.java" line="34" class="Interval" package="">
@@ -127,7 +99,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="361" class="ReachabilityStructure" package="">
+      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="350" class="ReachabilityStructure" package="">
         <option name="ENABLED" value="false" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -141,21 +113,8 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/ReachabilityStructure.java" line="571" class="ReachabilityStructure" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
     </line_breakpoints>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -170,29 +129,11 @@
       <file leaf-file-name="ReachabilityStructure.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ReachabilityStructure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="535" column="0" selection-start="21942" selection-end="21942" vertical-scroll-proportion="0.33278146">
+            <state line="540" column="30" selection-start="22469" selection-end="22469" vertical-scroll-proportion="12.114468">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2219#2226#0" expanded="true" />
-                <element signature="e#3378#3394#0" expanded="true" />
-                <element signature="e#3730#4179#0" expanded="true" />
-                <element signature="e#4168#4169#0" expanded="true" />
-                <element signature="e#4298#4305#0" expanded="true" />
-                <element signature="e#5038#5050#0" expanded="true" />
-                <element signature="e#6070#6077#0" expanded="true" />
-                <element signature="e#13811#13818#0" expanded="true" />
-                <element signature="e#16383#16390#0" expanded="true" />
-                <element signature="e#16528#16535#0" expanded="true" />
-                <element signature="e#16676#16683#0" expanded="true" />
-                <element signature="e#16856#16868#0" expanded="true" />
-                <element signature="e#17633#17643#0" expanded="true" />
-                <element signature="e#18652#18662#0" expanded="true" />
-                <element signature="e#18769#18783#0" expanded="true" />
-                <element signature="e#21016#21357#0" expanded="true" />
-                <element signature="e#21346#21347#0" expanded="true" />
-                <element signature="e#22628#22651#0" expanded="true" />
-                <element signature="e#23446#23458#0" expanded="true" />
-                <element signature="e#24086#24098#0" expanded="true" />
+                <element signature="e#3471#3920#0" expanded="true" />
+                <element signature="e#3909#3910#0" expanded="true" />
+                <element signature="e#15911#15918#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -202,9 +143,7 @@
         <entry file="file://$PROJECT_DIR$/src/Layer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="10" column="82" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -212,7 +151,7 @@
       <file leaf-file-name="ShortestPath.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ShortestPath.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="11" selection-start="1016" selection-end="1016" vertical-scroll-proportion="-25.2">
+            <state line="44" column="11" selection-start="1016" selection-end="1016" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -222,9 +161,7 @@
         <entry file="file://$PROJECT_DIR$/src/Arrow.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="20" column="0" selection-start="546" selection-end="546" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -242,9 +179,7 @@
         <entry file="file://$PROJECT_DIR$/src/IntervalTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="95" column="66" selection-start="4713" selection-end="4713" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -261,7 +196,7 @@
       <file leaf-file-name="PolygonInputFrame.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PolygonInputFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="12" selection-start="1886" selection-end="1978" vertical-scroll-proportion="0.0">
+            <state line="85" column="41" selection-start="2891" selection-end="2891" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -294,9 +229,9 @@
         <option value="$PROJECT_DIR$/src/Diagonal.java" />
         <option value="$PROJECT_DIR$/src/IntervalTest.java" />
         <option value="$PROJECT_DIR$/src/ShortestPath.java" />
-        <option value="$PROJECT_DIR$/src/PolygonInputFrame.java" />
         <option value="$PROJECT_DIR$/src/Interval.java" />
         <option value="$PROJECT_DIR$/src/Arrow.java" />
+        <option value="$PROJECT_DIR$/src/PolygonInputFrame.java" />
         <option value="$PROJECT_DIR$/src/ReachabilityStructure.java" />
       </list>
     </option>
@@ -333,7 +268,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -404,6 +338,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -422,12 +357,12 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.includeInheritedMembers" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
@@ -478,19 +413,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -516,6 +438,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -671,7 +606,6 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.4975669" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972524" sideWeight="0.4975669" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4929701" sideWeight="0.9101027" order="3" side_tool="false" content_ui="tabs" x="323" y="727" width="1660" height="576" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30530974" sideWeight="0.0553528" order="7" side_tool="true" content_ui="tabs" />
@@ -686,6 +620,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42267135" sideWeight="0.08690068" order="2" side_tool="false" content_ui="tabs" x="1203" y="451" width="916" height="777" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972524" sideWeight="0.4975669" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -758,27 +693,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="59" column="13" selection-start="1692" selection-end="1692" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2219#2226#0" expanded="true" />
-            <element signature="e#3378#3394#0" expanded="true" />
-            <element signature="e#3730#4179#0" expanded="true" />
-            <element signature="e#4168#4169#0" expanded="true" />
-            <element signature="e#4298#4305#0" expanded="true" />
-            <element signature="e#5038#5050#0" expanded="true" />
-            <element signature="e#6070#6077#0" expanded="true" />
-            <element signature="e#13811#13818#0" expanded="true" />
-            <element signature="e#16383#16390#0" expanded="true" />
-            <element signature="e#16528#16535#0" expanded="true" />
-            <element signature="e#16676#16683#0" expanded="true" />
-            <element signature="e#16856#16868#0" expanded="true" />
-            <element signature="e#17633#17643#0" expanded="true" />
-            <element signature="e#18652#18662#0" expanded="true" />
-            <element signature="e#18769#18783#0" expanded="true" />
-            <element signature="e#21016#21357#0" expanded="true" />
-            <element signature="e#21346#21347#0" expanded="true" />
-            <element signature="e#22628#22651#0" expanded="true" />
-            <element signature="e#23446#23458#0" expanded="true" />
-            <element signature="e#24086#24098#0" expanded="true" />
+            <element signature="e#3471#3920#0" expanded="true" />
+            <element signature="e#3909#3910#0" expanded="true" />
+            <element signature="e#15911#15918#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -787,36 +704,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="13" selection-start="821" selection-end="821" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2219#2226#0" expanded="true" />
-            <element signature="e#3378#3394#0" expanded="true" />
-            <element signature="e#3730#4179#0" expanded="true" />
-            <element signature="e#4168#4169#0" expanded="true" />
-            <element signature="e#4298#4305#0" expanded="true" />
-            <element signature="e#5038#5050#0" expanded="true" />
-            <element signature="e#6070#6077#0" expanded="true" />
-            <element signature="e#13811#13818#0" expanded="true" />
-            <element signature="e#16383#16390#0" expanded="true" />
-            <element signature="e#16528#16535#0" expanded="true" />
-            <element signature="e#16676#16683#0" expanded="true" />
-            <element signature="e#16856#16868#0" expanded="true" />
-            <element signature="e#17633#17643#0" expanded="true" />
-            <element signature="e#18652#18662#0" expanded="true" />
-            <element signature="e#18769#18783#0" expanded="true" />
-            <element signature="e#21016#21357#0" expanded="true" />
-            <element signature="e#21346#21347#0" expanded="true" />
-            <element signature="e#22628#22651#0" expanded="true" />
-            <element signature="e#23446#23458#0" expanded="true" />
-            <element signature="e#24086#24098#0" expanded="true" />
+            <element signature="e#3471#3920#0" expanded="true" />
+            <element signature="e#3909#3910#0" expanded="true" />
+            <element signature="e#15911#15918#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/ArrayList.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="0" selection-start="2297" selection-end="2297" vertical-scroll-proportion="0.87288135">
-          <folding />
-        </state>
+        <state line="64" column="0" selection-start="2297" selection-end="2297" vertical-scroll-proportion="0.87288135" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DiagonalTree.java">
@@ -828,16 +725,12 @@
     </entry>
     <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/Arrays.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="329" column="0" selection-start="14545" selection-end="14545" vertical-scroll-proportion="0.87288135">
-          <folding />
-        </state>
+        <state line="329" column="0" selection-start="14545" selection-end="14545" vertical-scroll-proportion="0.87288135" />
       </provider>
     </entry>
     <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/lang/Object.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="38" selection-start="457" selection-end="457" vertical-scroll-proportion="0.33240998">
-          <folding />
-        </state>
+        <state line="17" column="38" selection-start="457" selection-end="457" vertical-scroll-proportion="0.33240998" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Diagonal.java">
@@ -856,7 +749,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ShortestPath.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="11" selection-start="1016" selection-end="1016" vertical-scroll-proportion="-25.2">
+        <state line="44" column="11" selection-start="1016" selection-end="1016" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -864,17 +757,13 @@
     <entry file="file://$PROJECT_DIR$/src/IntervalTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="95" column="66" selection-start="4713" selection-end="4713" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/HashSet.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="40" column="0" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Interval.java">
@@ -887,53 +776,31 @@
     <entry file="file://$PROJECT_DIR$/src/Arrow.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="0" selection-start="546" selection-end="546" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Layer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="82" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/PolygonInputFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="12" selection-start="1886" selection-end="1978" vertical-scroll-proportion="0.0">
+        <state line="85" column="41" selection-start="2891" selection-end="2891" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ReachabilityStructure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="535" column="0" selection-start="21942" selection-end="21942" vertical-scroll-proportion="0.33278146">
+        <state line="540" column="30" selection-start="22469" selection-end="22469" vertical-scroll-proportion="12.114468">
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2219#2226#0" expanded="true" />
-            <element signature="e#3378#3394#0" expanded="true" />
-            <element signature="e#3730#4179#0" expanded="true" />
-            <element signature="e#4168#4169#0" expanded="true" />
-            <element signature="e#4298#4305#0" expanded="true" />
-            <element signature="e#5038#5050#0" expanded="true" />
-            <element signature="e#6070#6077#0" expanded="true" />
-            <element signature="e#13811#13818#0" expanded="true" />
-            <element signature="e#16383#16390#0" expanded="true" />
-            <element signature="e#16528#16535#0" expanded="true" />
-            <element signature="e#16676#16683#0" expanded="true" />
-            <element signature="e#16856#16868#0" expanded="true" />
-            <element signature="e#17633#17643#0" expanded="true" />
-            <element signature="e#18652#18662#0" expanded="true" />
-            <element signature="e#18769#18783#0" expanded="true" />
-            <element signature="e#21016#21357#0" expanded="true" />
-            <element signature="e#21346#21347#0" expanded="true" />
-            <element signature="e#22628#22651#0" expanded="true" />
-            <element signature="e#23446#23458#0" expanded="true" />
-            <element signature="e#24086#24098#0" expanded="true" />
+            <element signature="e#3471#3920#0" expanded="true" />
+            <element signature="e#3909#3910#0" expanded="true" />
+            <element signature="e#15911#15918#0" expanded="true" />
           </folding>
         </state>
       </provider>

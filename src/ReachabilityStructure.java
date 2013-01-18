@@ -34,15 +34,6 @@ public class ReachabilityStructure {
         _epsilon = epsilon;
 
 		Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, epsilon);
-		/*int ctr = 0;
-		for (int i = 0; i < borderPolyP.length - 1; i++) {
-				for (Arrow arrow : zeroLayer.arrows.get(i).get(0)) {
-					System.out.println(arrow.toString());
-					ctr ++;
-				}
-		}
-		System.out.println("Total number of intervals: " + ctr);
-		*/
 		layers = new ArrayList<Layer>();
         layers.add(zeroLayer);
     }
@@ -73,8 +64,6 @@ public class ReachabilityStructure {
                 }
             }
         }
-
-
         return null;
     }
 
@@ -379,32 +368,17 @@ public class ReachabilityStructure {
 
         //keep the originals in case they can connect later on
         //(hashset doesn't allow duplicates, so no need to worry here)
-        for (Arrow a : first) {
-            mergedCell.add(new Arrow(a));
-        }
-        for (Arrow a : second) {
-            mergedCell.add(new Arrow(a));
-        }
-        //mergedCell.addAll(new HashSet<Arrow>(first));
-        //mergedCell.addAll(new HashSet<Arrow>(second));
+        mergedCell.addAll(first);
+        mergedCell.addAll(second);
 
         return mergedCell;
     }
 
     ArrayList<Set<Arrow>> mergeTwoColumns(ArrayList<Set<Arrow>> left, ArrayList<Set<Arrow>> right) {
         //columns should only have one cell in them at this point, but many arrows
-        Set<Arrow> leftColumn = new HashSet<Arrow>();
-        for (Arrow a : left.get(0)) {
-            leftColumn.add(new Arrow(a));
-        }
-        Set<Arrow> rightColumn = new HashSet<Arrow>();
-        for (Arrow a : right.get(0)) {
-            rightColumn.add(new Arrow(a));
-        }
-        Set<Arrow> mergedColumn = new HashSet<Arrow>();
-        for (Arrow a : mergeCells(rightColumn, leftColumn)) {
-            mergedColumn.add(new Arrow(a));
-        }
+        Set<Arrow> leftColumn = new HashSet<Arrow>(left.get(0));
+        Set<Arrow> rightColumn = new HashSet<Arrow>(right.get(0));
+        Set<Arrow> mergedColumn = new HashSet<Arrow>(mergeCells(rightColumn, leftColumn));
 
         ArrayList<Set<Arrow>> result = new ArrayList<Set<Arrow>>();
         result.add(mergedColumn);
@@ -539,20 +513,6 @@ public class ReachabilityStructure {
         }
     }
 
-    /*
-        if (diagonalTree != null) {
-            HashSet<Arrow> result = new HashSet<Arrow>();
-            layers.add(new Layer());
-            layers.get(2).arrows = new ArrayList<ArrayList<Set<Arrow>>>();
-            for (Arrow a : mergeChildren(diagonalTree.root()).get(0)) {
-                result.add(a);
-            }
-            return result;
-        } else {
-            return null;
-        }
-     */
-
     ArrayList<Set<Arrow>> mergeChildren(DiagonalTree.DiagonalNode node){
             //get list of columns
             ArrayList<ArrayList<Set<Arrow>>> columns = new ArrayList<ArrayList<Set<Arrow>>>();
@@ -572,13 +532,13 @@ public class ReachabilityStructure {
             return merged;
     }
 
-
-
     ArrayList<Set<Arrow>> mergeColumns(ArrayList<ArrayList<Set<Arrow>>> columns) {
         ArrayList<Set<Arrow>> finalColumn = new ArrayList<Set<Arrow>>(columns.get(columns.size() - 1));
         if (columns.size() == 1) {
             return finalColumn;
         }
+
+        //merges right to left
         for (int i = columns.size() - 2; i >= 0; i--) {
             finalColumn = mergeTwoColumns(columns.get(i), finalColumn);
         }
