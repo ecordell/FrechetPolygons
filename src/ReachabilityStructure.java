@@ -1,12 +1,19 @@
 
+import net.sf.epsgraphics.ColorMode;
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.Polygon;
 import org.poly2tri.geometry.polygon.PolygonPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
+import net.sf.epsgraphics.EpsGraphics;
 
+
+import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.io.FileOutputStream;
+import java.io.File;
 
 
 //TODO: only calculate columns once, then double. This saves a LOT of calculation
@@ -18,6 +25,8 @@ public class ReachabilityStructure {
 	Point2D.Double[] borderPolyQ;
     ArrayList<Layer> layers;
     double _epsilon;
+
+    EpsGraphics baseG;
 
 	//Construct base reachability graph from polygons
 	public ReachabilityStructure(Point2D.Double[] polyP, Point2D.Double[] polyQ, double epsilon) {
@@ -33,38 +42,177 @@ public class ReachabilityStructure {
 		System.arraycopy(polyQ, 0, borderPolyQ, 0, polyQ.length);
         _epsilon = epsilon;
 
-		Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, epsilon);
+
+
+		Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, epsilon, false);
 		layers = new ArrayList<Layer>();
         layers.add(zeroLayer);
+
+        for (ArrayList<Set<Arrow>> column : layers.get(0).arrows) {
+            mergeCellsIntoColumn(column);
+        }
+
+        baseG = generateFSD("BaseReachability.eps");
+    }
+
+    public void saveFSD() {
+        EpsGraphics g = generateFSD("FSD.eps");
+        try{
+            g.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+        }
+    }
+
+    public void saveAllPaths() {
+        EpsGraphics g = generateFSD("ReachabilityGraphAllPaths.eps");
+        for (Point2D.Double[] path : possiblePaths()) {
+            addPathToFSD(path, "ReachabilityGraphAllPaths.eps", g);
+        }
+        try{
+            g.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+        }
+    }
+
+    public void saveAllPathsSeperately() {
+        int pathCount = 0;
+
+        for (Point2D.Double[] path : possiblePaths()) {
+            EpsGraphics g = generateFSD("Paths/path" + pathCount + ".eps");
+            addPathToFSD(path, "Paths/path" + pathCount + ".eps", g);
+            try{
+                g.close();
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e.toString());
+            }
+            ++pathCount;
+        }
+    }
+
+    public EpsGraphics generateFSD(String filename) {
+        try {
+            FileOutputStream image = new FileOutputStream(filename, false);
+            EpsGraphics g = new EpsGraphics(filename, image, 0, 0, (borderPolyP.length - 1)*100 + 10, (borderPolyQ.length -1)*100 + 10, ColorMode.COLOR_RGB);
+
+            g.setColor(Color.black);
+
+            for (int i = 0; i < borderPolyP.length; i++) {
+                g.drawLine(5 + i * 100, 5, 5 + i * 100, (borderPolyQ.length - 1) * 100 + 5);
+            }
+
+            for (int j = 0; j < borderPolyQ.length; j++) {
+                g.drawLine(5, 5 + j*100, (borderPolyP.length-1)*100 + 5, 5 + j*100);
+            }
+
+            Layer zeroLayer = createBaseLayer(borderPolyP, borderPolyQ, _epsilon, false);
+            for (int i = 0; i < borderPolyP.length - 1; i++) {
+                for (int j = 0; j < borderPolyQ.length - 1; j++) {
+                    addCellToFSD(zeroLayer.arrows.get(i).get(j), filename, g);
+                }
+            }
+
+            //g.close();
+            //image.close();
+            return g;
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+        }
+        return null;
+    }
+
+    public void addCellToFSD(Set<Arrow> arrows, String filename, EpsGraphics g) {
+
+        int height = (borderPolyQ.length - 1) * 100;
+
+        try {
+            FileOutputStream image = new FileOutputStream(filename, true);
+            g.setColor(Color.white);
+            if (arrows != null) {
+                for (Arrow arrow : arrows) {
+                    if (!arrow.isNull()) {
+                        g.drawLine((int)(arrow.start.startGraph.x * 100) + 5, height - (int)(arrow.start.startGraph.y * 100) + 5, (int)(arrow.start.endGraph.x * 100) + 5, height - (int)(arrow.start.endGraph.y * 100) + 5);
+                        g.drawLine((int) (arrow.end.startGraph.x * 100) + 5, height - (int) (arrow.end.startGraph.y * 100) + 5, (int) (arrow.end.endGraph.x * 100) + 5, height - (int) (arrow.end.endGraph.y * 100) + 5);
+                    }
+                }
+            }
+            g.setColor(Color.getHSBColor(0.f, 1.f, 1.f));
+            //g.close();
+            image.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+        }
+
+    }
+
+    public void addPathToFSD(Point2D.Double[] path, String filename, EpsGraphics g) {
+        int height = (borderPolyQ.length - 1) * 100;
+        try {
+            FileOutputStream image = new FileOutputStream(filename, true);
+            float[] hsv = Color.RGBtoHSB(g.getColor().getRed(), g.getColor().getGreen(), g.getColor().getBlue(), null);
+            g.setColor(Color.getHSBColor(hsv[0] + 0.1f, 1, 1));
+            for (int i = 0; i< path.length - 1; i++) {
+                g.drawLine((int)(path[i].x * 100) + 5, height - (int)(path[i].y * 100) + 5, (int)(path[i+1].x * 100) + 5, height - (int)(path[i+1].y * 100) + 5);
+            }
+            //baseG.close();
+            image.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+        }
     }
 
     public Point2D.Double[] getFirstReachablePath() {
+        if (possiblePaths().size() > 0) {
+            return possiblePaths().get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Point2D.Double[]> possiblePaths() {
+        ArrayList<Point2D.Double[]> possibles = new ArrayList<Point2D.Double[]>();
         for (ArrayList<Set<Arrow>> column : layers.get(0).arrows) {
-            for (Arrow arrow : column.get(0)) {
-                if (!arrow.start.isVertical() && arrow.start.startGraph.y == 0) {
-                    Point2D.Double testPoint = arrow.start.getMidpoint();
-                    Point2D.Double endPoint = new Point2D.Double(testPoint.x + originalPolyP.length - 1, originalPolyQ.length - 1);
-                    Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
-                    if (reachable != null) {
-                        ArrayList<Arrow> possibles = new ArrayList<Arrow>();
-                        for (Arrow possible : reachable) {
-                            if (possible.start.contains(testPoint) && possible.end.contains(endPoint)) {
-                                 possibles.add(possible);
-                                Point2D.Double[] path = pathFromArrow(possible);
-                                if (path != null && path.length == originalPolyP.length + originalPolyQ.length - 2) {
-                                    Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
-                                    finalPath[0] = testPoint;
-                                    System.arraycopy(path, 0, finalPath, 1, path.length);
-                                    finalPath[finalPath.length - 1] = endPoint;
-                                    return finalPath;
+            if (column.get(0) != null) {
+                for (Arrow arrow : column.get(0)) {
+                    if (!arrow.isNull() && !arrow.start.isVertical() && arrow.start.startGraph.y == 0) {
+                        Point2D.Double testPoint = arrow.start.getMidpoint();
+                        Set<Arrow> reachable = reachabilityStructureFromPoint(testPoint);
+
+                        if (reachable != null) {
+                            for (Arrow possible : reachable) {
+                                if (!possible.isNull() && !possible.end.isVertical() && possible.end.startGraph.y == originalPolyQ.length - 1) {
+                                    //We check the theoretical intersection of start and end intervals to see if we can find a full path through FSD
+                                    Interval transposedEnd = new Interval(possible.end);
+                                    transposedEnd.startGraph.x  -=  originalPolyP.length;
+                                    transposedEnd.endGraph.x -= originalPolyP.length;
+                                    transposedEnd.startGraph.y = 0;
+                                    transposedEnd.endGraph.y = 0;
+                                    Interval intersection = possible.start.intersection(transposedEnd);
+
+                                    if (intersection != null) {
+                                        Point2D.Double startPoint = intersection.getMidpoint();
+                                        Point2D.Double endPoint = new Point2D.Double(startPoint.x + originalPolyP.length, originalPolyQ.length - 1);
+
+                                        if (possible.start.contains(startPoint) && possible.end.contains(endPoint)) {
+                                            Point2D.Double[] path = pathFromArrow(possible);
+                                            if (path != null && path.length == originalPolyP.length + originalPolyQ.length - 1) {
+                                                Point2D.Double[] finalPath = new Point2D.Double[path.length + 1];
+                                                finalPath[0] = startPoint;
+                                                System.arraycopy(path, 0, finalPath, 1, path.length);
+                                                finalPath[finalPath.length - 1] = endPoint;
+                                                possibles.add(finalPath);
+                                            }
+                                        }
+                                    }
                                 }
-                             }
+                            }
                         }
                     }
                 }
             }
         }
-        return null;
+        return possibles;
     }
 
     Point2D.Double[] pathFromArrow(Arrow arrow) {
@@ -72,7 +220,11 @@ public class ReachabilityStructure {
         Set<Point2D.Double> intervalSet = new HashSet<Point2D.Double>();
 
         for (Arrow a : arrowSet) {
-            intervalSet.add(a.end.getMidpoint());
+            if (a.end.isVertical()) {
+                intervalSet.add(a.end.startGraph);
+            } else {
+                intervalSet.add(a.end.endGraph);
+            }
         }
 
         Point2D.Double[] result = new Point2D.Double[intervalSet.size()];
@@ -112,7 +264,7 @@ public class ReachabilityStructure {
         }
     }
 
-    Layer createBaseLayer(Point2D.Double[] polyX, Point2D.Double[] polyY, double epsilon) {
+    Layer createBaseLayer(Point2D.Double[] polyX, Point2D.Double[] polyY, double epsilon, boolean polyLine) {
         Layer layerZero = new Layer();
         layerZero.level = 0;
         layerZero.arrows = new ArrayList<ArrayList<Set<Arrow>>>();
@@ -172,7 +324,6 @@ public class ReachabilityStructure {
                 }
                 column.add(arrowSet);
             }
-            mergeCellsIntoColumn(column);
         }
         return layerZero;
     }
@@ -331,36 +482,51 @@ public class ReachabilityStructure {
 
     HashSet<Arrow> mergeCells(Set<Arrow> first, Set<Arrow> second) {
         HashSet<Arrow> mergedCell = new HashSet<Arrow>();
+        if (first == null && second == null) {
+            return null;
+        }
+        if (first == null) {
+            mergedCell.addAll(second);
+            return mergedCell;
+        }
+        if (second == null) {
+            mergedCell.addAll(first);
+            return mergedCell;
+        }
         //loop through arrows in adjacent cells and find the ones that connect
         for (Arrow topArrow : first) {
-            for (Arrow bottomArrow : second) {
-                if(topArrow.start.intersects(bottomArrow.end)) {
-                    //merge arrows
-                    Interval middle = topArrow.start.intersection(bottomArrow.end);
-                    Arrow newArrow = null;
-                    if (middle != null) {
-                        //if they connect, we copy the two arrows, modify their connection,
-                        //create a new arrow with the constituents as subarrows, and add that to the mergedcell
-                        //after the mergedcell is created, we can delete the base arrows
-                        Arrow topCopy = new Arrow(topArrow);
-                        topCopy.start = new Interval(middle);
-                        Arrow bottomCopy = new Arrow(bottomArrow);
-                        bottomCopy.end = new Interval(middle);
+            if (!topArrow.isNull()) {
+                for (Arrow bottomArrow : second) {
+                    if(!bottomArrow.isNull()) {
+                        if(topArrow.start.intersects(bottomArrow.end)) {
+                            //merge arrows
+                            Interval middle = topArrow.start.intersection(bottomArrow.end);
+                            Arrow newArrow = null;
+                            if (middle != null) {
+                                //if they connect, we copy the two arrows, modify their connection,
+                                //create a new arrow with the constituents as subarrows, and add that to the mergedcell
+                                //after the mergedcell is created, we can delete the base arrows
+                                Arrow topCopy = new Arrow(topArrow);
+                                topCopy.start = new Interval(middle);
+                                Arrow bottomCopy = new Arrow(bottomArrow);
+                                bottomCopy.end = new Interval(middle);
 
-                        newArrow = new Arrow();
-                        newArrow.subArrows.add(topCopy);
-                        newArrow.subArrows.add(bottomCopy);
-                        newArrow.start = new Interval(bottomCopy.start);
-                        newArrow.end = new Interval(topCopy.end);
+                                newArrow = new Arrow();
+                                newArrow.subArrows.add(topCopy);
+                                newArrow.subArrows.add(bottomCopy);
+                                newArrow.start = new Interval(bottomCopy.start);
+                                newArrow.end = new Interval(topCopy.end);
 
-                        //if end and middle are parallel, we need to project monotonicity
-                        //monotonicity is already enforced within a single cell
-                        //and enforcemonotonicity knows whether or not start and end are parallel
-                        enforceMonotonicity(newArrow);
-                    }
-                    //enforceMonotonicity could null out the new arrow
-                    if (newArrow != null && !newArrow.isNull()) {
-                        mergedCell.add(newArrow);
+                                //if end and middle are parallel, we need to project monotonicity
+                                //monotonicity is already enforced within a single cell
+                                //and enforcemonotonicity knows whether or not start and end are parallel
+                                enforceMonotonicity(newArrow);
+                            }
+                            //enforceMonotonicity could null out the new arrow
+                            if (newArrow != null && !newArrow.isNull()) {
+                                mergedCell.add(newArrow);
+                            }
+                        }
                     }
                 }
             }
@@ -397,7 +563,7 @@ public class ReachabilityStructure {
 
         boolean validStart = false;
         for (Arrow arrow : column) {
-            if (arrow.start.contains(startPoint)) {
+            if (!arrow.isNull() && arrow.start.contains(startPoint)) {
                 validStart = true;
                 break;
             }
@@ -407,28 +573,31 @@ public class ReachabilityStructure {
             //trim invalid diagonals
             for (Diagonal d : diagonalsCopy) {
                 if (d.startIndex <= startIndex || d.endIndex <= startIndex ||
-                        d.endIndex > startIndex + originalPolyP.length || d.startIndex >= startIndex + originalPolyP.length) {
+                        d.endIndex > startIndex + originalPolyP.length + 1 || d.startIndex >= startIndex + originalPolyP.length) {
                     diagonals.remove(d);
                 }
             }
 
-            //put those left into tree
-            diagonalTree = new DiagonalTree(new Diagonal(startIndex, startIndex + originalPolyP.length));
+            int endIndex =  startIndex + originalPolyP.length + 1;
 
-            for (Diagonal d : diagonals) {
-                diagonalTree.addDiagonal(d);
+            if (endIndex < borderPolyP.length) {
+                //put those left into tree
+                diagonalTree = new DiagonalTree(new Diagonal(startIndex, startIndex + originalPolyP.length + 1));
+
+                for (Diagonal d : diagonals) {
+                    diagonalTree.addDiagonal(d);
+                }
+                diagonalTree.subdivideDiagonals();
+
+                //diagonalTree.print();
+
+                return diagonalTree;
             }
-            diagonalTree.subdivideDiagonals();
-
-            diagonalTree.print();
-
-            return diagonalTree;
         }
         return null;
     }
 
-    //this is for the polygon on the x-axis (it doubles the length)
-    ArrayList<Diagonal> orderedDiagonalsForPolygon(Point2D.Double[] poly) {
+    ArrayList<Diagonal> trueDiagonalsForPolygon(Point2D.Double[] poly) {
         int length = poly.length;
         ArrayList<Diagonal> diagonals = new ArrayList<Diagonal>();
 
@@ -472,6 +641,13 @@ public class ReachabilityStructure {
                 }
             }
         }
+        return diagonals;
+    }
+
+    //this is for the polygon on the x-axis (it doubles the length)
+    ArrayList<Diagonal> orderedDiagonalsForPolygon(Point2D.Double[] poly) {
+        int length = poly.length;
+         ArrayList<Diagonal> diagonals = trueDiagonalsForPolygon(poly);
 
         //System.out.println("Number of diagonals: "  + diagonals.size());
 
@@ -554,11 +730,11 @@ public class ReachabilityStructure {
         ArrayList<Set<Arrow>> columnCopy = new ArrayList<Set<Arrow>>(column);
 
         for (Arrow arrow : columnCopy.get(0)) {
-            if (arrow.start.isVertical() && arrow.end.isVertical()) {
+            if (!arrow.isNull() && arrow.start.isVertical() && arrow.end.isVertical()) {
                 Point2D.Double startPoint = arrow.start.getPolygonMidpoint(borderPolyQ);
                 Point2D.Double endPoint = arrow.end.getPolygonMidpoint(borderPolyQ);
                 ShortestPath spCalculator = new ShortestPath(insertPointIntoPolygon(insertPointIntoPolygon(originalPolyQ, startPoint), endPoint), startPoint, endPoint);
-                //TODO: can this fail for midpoints but not for other points in the interval?
+
                 if (spCalculator.getPath() != null && !startPoint.equals(endPoint)) {
                     //get diagonal path
                     Point2D.Double[] diagonalPath = {borderPolyP[diagonal.startIndex], borderPolyP[diagonal.endIndex]};
@@ -566,7 +742,7 @@ public class ReachabilityStructure {
                     Point2D.Double[] shortestPath = spCalculator.getPath();
 
                     //find frechet distance between them
-                    Layer reachability = createBaseLayer(diagonalPath, shortestPath, _epsilon);
+                    Layer reachability = createBaseLayer(diagonalPath, shortestPath, _epsilon, true);
 
                     Set<Arrow> finalArrows;
                     for (ArrayList<Set<Arrow>> c : reachability.arrows) {
@@ -575,13 +751,16 @@ public class ReachabilityStructure {
                     finalArrows = mergeColumns(reachability.arrows).get(0);
 
                     boolean isPath = false;
-                    for (Arrow a : finalArrows) {
-                        if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, shortestPath.length))) {
-                              //exists a path from start to end
-                              isPath = true;
-                              break;
+                    if (finalArrows != null) {
+                        for (Arrow a : finalArrows) {
+                            if (a.start.contains(new Point2D.Double(0, 0)) && a.end.contains(new Point2D.Double(1, shortestPath.length))) {
+                                  //exists a path from start to end
+                                  isPath = true;
+                                  break;
+                            }
                         }
                     }
+
                     if (!isPath) {
                         //if frechet distance is too big between diagonal and sp, then we remove the arrow.
                         column.remove(arrow);

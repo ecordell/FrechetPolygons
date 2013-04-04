@@ -11,4 +11,7 @@
 	<lib name="slf4j-api-1.7.2.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.2.jar!/"/>
 	</lib>
+	<lib name="epsgraphics-1.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/epsgraphics-1.2.jar!/"/>
+	</lib>
 </component>
